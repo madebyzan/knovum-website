@@ -1,0 +1,50 @@
+---
+import { SECTION_IDS } from "@/config/navigation";
+import { externalLinks } from "@/config/site";
+import { getI18n } from "@/i18n";
+import { formatDate } from "@/lib/format";
+import { PLATFORM_NAMES, type Release } from "@/lib/releases";
+
+import PlatformCard from "../download/PlatformCard.astro";
+import Section from "../ui/Section.astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+import { inlineLink } from "../ui/variants";
+
+interface Props {
+  release: Release;
+}
+
+const { t, tag } = getI18n(Astro);
+const { download } = t;
+const { release } = Astro.props;
+const id = SECTION_IDS.download;
+---
+
+{/* The page closes as it opened: centred, at display size, on the canvas's dot grid. */}
+<Section id={id} labelledBy={`${id}-title`} divided class="relative isolate overflow-hidden">
+  <div class="absolute inset-x-0 bottom-0 -z-10 h-[40rem] dot-field-bottom" aria-hidden="true"></div>
+
+  <SectionHeading
+    id={`${id}-title`}
+    kicker={t.nav.sections.download}
+    title={download.title}
+    lead={download.body(release.version, formatDate(release.publishedAt, tag))}
+    size="display"
+    align="center"
+  />
+
+  <div class="mx-auto mt-14 grid max-w-downloads gap-4 md:mt-16 md:grid-cols-2 md:gap-5" data-reveal>
+    {PLATFORM_NAMES.map((platform) => (
+      <PlatformCard platform={platform} installers={release.installers} />
+    ))}
+  </div>
+
+  <p class="mt-10 flex justify-center gap-8 text-body-sm text-ink-muted" data-reveal>
+    <a class={inlineLink()} href={release.url}>
+      {download.releaseNotes}
+    </a>
+    <a class={inlineLink()} href={externalLinks.releases}>
+      {download.allReleases}
+    </a>
+  </p>
+</Section>

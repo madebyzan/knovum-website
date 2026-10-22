@@ -1,0 +1,9 @@
+---
+import { CLOUDFLARE_ANALYTICS_TOKEN } from "astro:env/server";
+
+import { cloudflareAnalytics } from "@/config/analytics";
+
+const beacon = CLOUDFLARE_ANALYTICS_TOKEN ? JSON.stringify({ token: CLOUDFLARE_ANALYTICS_TOKEN }) : undefined;
+---
+
+{beacon && <script is:inline defer src={cloudflareAnalytics.script} data-cf-beacon={beacon} />}

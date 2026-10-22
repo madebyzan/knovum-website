@@ -1,0 +1,18 @@
+---
+import { getI18n } from "@/i18n";
+
+import CanvasCard from "./CanvasCard.astro";
+import CardKind from "./CardKind.astro";
+
+interface Props {
+  class: string;
+}
+
+const { note } = getI18n(Astro).t.canvas;
+---
+
+<CanvasCard class={Astro.props.class}>
+  <CardKind icon="sticky-note" label={note.kind} />
+  <p class="mb-1.5 text-canvas-lg leading-snug font-semibold text-ink">{note.title}</p>
+  <p class="text-ink-muted">{note.body}</p>
+</CanvasCard>

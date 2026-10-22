@@ -1,0 +1,49 @@
+---
+import { getI18n } from "@/i18n";
+
+import SpecimenFrame from "./SpecimenFrame.astro";
+import { panel, tag } from "./variants";
+
+const { canvas, features } = getI18n(Astro).t;
+const { structure } = features;
+
+// The claim's evidence and how each piece bears on it: two support it, one argues against it.
+const evidence = [
+  { ...structure.evidence[0], relation: canvas.relation, contradicts: false },
+  { ...structure.evidence[1], relation: canvas.relation, contradicts: false },
+  { ...structure.evidence[2], relation: structure.contradicts, contradicts: true },
+];
+---
+
+<SpecimenFrame>
+  <div class={panel({ selected: true, class: "p-5" })}>
+    <span class={tag()}>{canvas.claim.kind}</span>
+    <p class="mt-3 text-body leading-snug font-medium text-ink">{canvas.claim.text}</p>
+  </div>
+
+  <ul class="ml-5">
+    {evidence.map((item, index) => (
+      <li class="relative pt-3 pl-8">
+        {/* The tree's rule: an elbow into this item, and the trunk on to the next. */}
+        <span class="absolute top-0 left-0 h-11.5 w-6 rounded-bl-md border-b border-l border-line-strong" />
+        {index < evidence.length - 1 && (
+          <span class="absolute top-0 bottom-0 left-0 border-l border-line-strong" />
+        )}
+        <div class={panel({ class: "flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3" })}>
+          <span class={tag({ tone: item.contradicts ? "emphasis" : "relation" })}>{item.relation}</span>
+          <span class="min-w-0">
+            <span class="block text-caption text-ink-subtle">{item.kind}</span>
+            <span class="block text-body-sm text-ink">{item.title}</span>
+          </span>
+        </div>
+      </li>
+    ))}
+  </ul>
+
+  <p class="mt-6 flex items-center gap-2.5 border-t border-line pt-4 text-label text-ink-muted">
+    <span class="size-1.5 shrink-0 rounded-full bg-ink" />
+    <span class="font-semibold text-ink">{structure.health}</span>
+    <span class="text-ink-subtle">·</span>
+    {structure.healthDetail}
+  </p>
+</SpecimenFrame>

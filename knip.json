@@ -1,0 +1,10 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": ["src/pages/**/*.{astro,ts}", "src/scripts/*.ts", "tests/**/*.{ts,spec.ts,test.ts}"],
+  "project": ["src/**/*.{astro,ts,css}", "tests/**/*.ts"],
+  "ignoreDependencies": [
+    "@fontsource-variable/source-serif-4",
+    "@iconify-json/lucide",
+    "@iconify-json/simple-icons"
+  ]
+}

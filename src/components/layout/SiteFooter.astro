@@ -1,0 +1,90 @@
+---
+import { LOCALES, localeMeta } from "@/config/locales";
+import { PRIMARY_SECTIONS, PROJECT_LINKS } from "@/config/navigation";
+import { externalLinks, site } from "@/config/site";
+import { getI18n, homePath, sectionPath } from "@/i18n";
+
+import Brand from "../ui/Brand.astro";
+import Container from "../ui/Container.astro";
+import { inlineLink, navLink } from "../ui/variants";
+
+const { locale, t } = getI18n(Astro);
+
+interface FooterLink {
+  readonly label: string;
+  readonly href: string;
+  readonly lang?: string;
+  readonly current?: boolean;
+}
+
+const columns: readonly { readonly title: string; readonly links: readonly FooterLink[] }[] = [
+  {
+    title: t.footer.productTitle,
+    links: [...PRIMARY_SECTIONS, "download" as const].map((section) => ({
+      label: t.nav.sections[section],
+      href: sectionPath(locale, section),
+    })),
+  },
+  {
+    title: t.footer.projectTitle,
+    links: PROJECT_LINKS.map((key) => ({ label: t.footer.links[key], href: externalLinks[key] })),
+  },
+  {
+    title: t.footer.languageTitle,
+    links: LOCALES.map((candidate) => ({
+      label: localeMeta[candidate].name,
+      href: homePath(candidate),
+      lang: localeMeta[candidate].tag,
+      current: candidate === locale,
+    })),
+  },
+];
+
+// The year of the build: a static page cannot know the reader's, and the build is when it changes.
+const year = new Date().getUTCFullYear();
+---
+
+<footer class="border-t border-line pt-18 pb-10 text-body-sm">
+  <Container>
+    <div class="grid grid-cols-2 gap-10 md:grid-cols-[2fr_repeat(3,1fr)]">
+      <div class="col-span-full md:col-span-1">
+        <a href={homePath(locale)} class="-m-1 inline-block rounded-md p-1">
+          <Brand size="sm" />
+        </a>
+        <p class="mt-3.5 text-ink-muted">{t.footer.tagline}</p>
+      </div>
+
+      {columns.map((column) => (
+        <nav aria-label={column.title}>
+          <h2 class="mb-4 text-label font-semibold text-ink">{column.title}</h2>
+          <ul class="space-y-2.5">
+            {column.links.map((link) => (
+              <li>
+                <a
+                  class={navLink()}
+                  href={link.href}
+                  lang={link.lang}
+                  hreflang={link.lang}
+                  aria-current={link.current ? "page" : undefined}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ))}
+    </div>
+
+    <div class="mt-18 flex flex-wrap justify-between gap-x-8 gap-y-3 border-t border-line pt-6 text-caption text-ink-subtle">
+      <p>
+        © {year} {site.name}
+      </p>
+      <p>
+        <a class={inlineLink()} href={externalLinks.license}>
+          {t.footer.licenseNote}
+        </a>
+      </p>
+    </div>
+  </Container>
+</footer>

@@ -1,0 +1,34 @@
+---
+import { tv, type VariantProps } from "@/lib/tv";
+
+import Container from "./Container.astro";
+
+const section = tv({
+  base: "py-section",
+  variants: {
+    tone: {
+      default: "",
+      muted: "bg-paper-muted",
+      inverse: "tone-inverse",
+    },
+    divided: { true: "border-t border-line" },
+  },
+  defaultVariants: { tone: "default", divided: false },
+});
+
+type Props = VariantProps<typeof section> & {
+  id?: string;
+  /** The id of the heading that names this section. */
+  labelledBy?: string;
+  class?: string;
+  containerClass?: string;
+};
+
+const { id, labelledBy, tone, divided, class: className, containerClass } = Astro.props;
+---
+
+<section id={id} aria-labelledby={labelledBy} class={section({ tone, divided, class: className })}>
+  <Container class={containerClass}>
+    <slot />
+  </Container>
+</section>

@@ -1,0 +1,14 @@
+# This site is its own workspace root, separate from the Knovum desktop app.
+engineStrict: true
+strictPeerDependencies: false
+saveExact: true
+allowBuilds:
+  esbuild: true
+  sharp: true
+  workerd: true
+minimumReleaseAgeExclude:
+  - "@astrojs/markdown-satteri@0.4.5"
+  - "@astrojs/prism@4.1.1"
+  - "@astrojs/telemetry@3.4.1"
+  - astro@7.4.2
+  - "@lobehub/icons-static-svg@1.97.0"

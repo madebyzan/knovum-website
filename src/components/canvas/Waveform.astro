@@ -1,0 +1,47 @@
+---
+import { tv } from "@/lib/tv";
+
+interface Props {
+  /** Bars drawn darker: the stretch the quote beside it was taken from. */
+  highlight: readonly [number, number];
+  /** Height and spacing where it is placed; it always spans its container's width. */
+  class?: string;
+}
+
+const { highlight, class: className } = Astro.props;
+
+const BARS = 46;
+const BAR_WIDTH = 4;
+const GAP = 2.5;
+const HEIGHT = 38;
+
+// A fixed waveform rather than a random one, so every build draws the same recording.
+const bars = Array.from({ length: BARS }, (_, index) => {
+  const level = Math.abs(
+    Math.sin(index * 0.55) * 0.6 + Math.sin(index * 1.7) * 0.3 + Math.sin(index * 0.13) * 0.25,
+  );
+  const height = HEIGHT * (0.18 + Math.min(level, 1) * 0.7);
+  return {
+    x: index * (BAR_WIDTH + GAP),
+    y: (HEIGHT - height) / 2,
+    height,
+    highlighted: index >= highlight[0] && index <= highlight[1],
+  };
+});
+const width = BARS * BAR_WIDTH + (BARS - 1) * GAP;
+
+const waveform = tv({ base: "block w-full" });
+---
+
+<svg class={waveform({ class: className })} viewBox={`0 0 ${width} ${HEIGHT}`} preserveAspectRatio="none">
+  {bars.map((bar) => (
+    <rect
+      x={bar.x}
+      y={bar.y.toFixed(2)}
+      width={BAR_WIDTH}
+      height={bar.height.toFixed(2)}
+      rx="2"
+      class={bar.highlighted ? "fill-ink/55" : "fill-ink/22"}
+    />
+  ))}
+</svg>

@@ -1,0 +1,187 @@
+---
+import { transcriptTiming } from "@/data/sample";
+import { getI18n } from "@/i18n";
+import { splitWords } from "@/lib/words";
+
+/*
+ * Listen: a stretch of the sample recording as Knovum transcribes it. The waveform is shaded by
+ * speaker (diarization), the transcript is split into words timed to the stretch (alignment), and
+ * playing it lights each word as it is spoken. Every position comes from `transcriptTiming`, so
+ * the waveform, the transcript and the playhead always agree.
+ */
+const { t, tag } = getI18n(Astro);
+const { listen } = t.onDevice;
+
+const lines = transcriptTiming.map((timing, index) => {
+  const tokens = splitWords(listen.lines[index] ?? "", tag);
+  const total = tokens.reduce((sum, token) => sum + token.text.length, 0);
+  let before = 0;
+  const timed = tokens.map((token) => {
+    const at = timing.from + ((timing.to - timing.from) * before) / total;
+    before += token.text.length;
+    return { ...token, at: at.toFixed(4) };
+  });
+  return { ...timing, tokens: timed };
+});
+
+const BARS = 96;
+const bars = Array.from({ length: BARS }, (_, index) => {
+  const position = (index + 0.5) / BARS;
+  const speaker = transcriptTiming.find((line) => position >= line.from && position <= line.to)?.speaker;
+  const level = Math.abs(
+    Math.sin(index * 0.47) * 0.5 + Math.sin(index * 1.73) * 0.32 + Math.sin(index * 0.11) * 0.3,
+  );
+  const height = speaker ? 14 + Math.min(level, 1) * 46 : 3;
+  return { x: index * 10 + 2, y: (64 - height) / 2, height, speaker };
+});
+const barTone = (speaker: number | undefined) =>
+  speaker === 1 ? "fill-ink" : speaker === 2 ? "fill-ink-muted" : "fill-ink/25";
+---
+
+<div class="flex h-full flex-col" data-listen>
+  <div class="relative mx-5 mt-5 h-16 shrink-0 sm:mx-6">
+    {/* The waveform twice: dimmed, and full strength up to the playhead. */}
+    <svg
+      viewBox={`0 0 ${String(BARS * 10)} 64`}
+      preserveAspectRatio="none"
+      class="absolute inset-0 size-full opacity-35"
+    >
+      {bars.map((bar) => (
+        <rect
+          x={bar.x}
+          y={bar.y.toFixed(1)}
+          width="6"
+          height={bar.height.toFixed(1)}
+          rx="3"
+          class={barTone(bar.speaker)}
+        />
+      ))}
+    </svg>
+    <svg
+      viewBox={`0 0 ${String(BARS * 10)} 64`}
+      preserveAspectRatio="none"
+      class="played absolute inset-0 size-full"
+    >
+      {bars.map((bar) => (
+        <rect
+          x={bar.x}
+          y={bar.y.toFixed(1)}
+          width="6"
+          height={bar.height.toFixed(1)}
+          rx="3"
+          class={barTone(bar.speaker)}
+        />
+      ))}
+    </svg>
+    <div class="playhead pointer-events-none absolute inset-0">
+      <span class="absolute -inset-y-1.5 left-0 w-px bg-accent"></span>
+      <span class="absolute -top-2.5 -left-1 size-2 rounded-full bg-accent"></span>
+    </div>
+  </div>
+
+  <ol class="mt-5 flex-1 space-y-5 overflow-hidden border-t border-line px-5 pt-5 sm:px-6">
+    {lines.map((line) => (
+      <li class="grid grid-cols-[auto_minmax(0,1fr)] gap-3.5">
+        <span
+          class:list={[
+            "grid size-7 place-items-center rounded-full text-caption font-semibold",
+            line.speaker === 1 ? "bg-ink text-paper" : "border border-line-strong text-ink",
+          ]}
+        >
+          {line.speaker}
+        </span>
+        <div>
+          <p class="text-caption text-ink-subtle">
+            <span class="font-medium text-ink-muted">{listen.speaker(line.speaker)}</span> ·{" "}
+            <span class="tabular-nums">{line.at}</span>
+          </p>
+          <p class="mt-1 text-body-sm text-ink">
+            {line.tokens.map((token) =>
+              token.word ? (
+                <span class="rounded-[0.2em] transition-colors duration-200" data-word data-at={token.at}>
+                  {token.text}
+                </span>
+              ) : (
+                token.text
+              ),
+            )}
+          </p>
+        </div>
+      </li>
+    ))}
+  </ol>
+</div>
+
+<style>
+  /* At rest, the stretch has been played through: every word lit, the playhead gone. */
+  [data-listen] {
+    --progress: 1;
+  }
+
+  .played {
+    clip-path: inset(0 calc((1 - var(--progress)) * 100%) 0 0);
+  }
+
+  .playhead {
+    translate: calc(var(--progress) * 100%) 0;
+    opacity: 0;
+  }
+
+  [data-listen][data-playing] .playhead {
+    opacity: 1;
+  }
+
+  [data-listen][data-playing] [data-word]:not([data-said]) {
+    color: var(--color-ink-subtle);
+  }
+
+  [data-word][data-current] {
+    background-color: color-mix(in oklab, var(--color-accent) 28%, transparent);
+    box-shadow: 0 0 0 0.12em color-mix(in oklab, var(--color-accent) 28%, transparent);
+  }
+</style>
+
+<script>
+  import { loop, whileShown } from "@/scripts/playback";
+
+  /** How long the stretch takes to play, and the pause before it plays again. */
+  const PLAY_MS = 8000;
+  const REST_MS = 1500;
+
+  for (const root of document.querySelectorAll<HTMLElement>("[data-listen]")) {
+    const words = [...root.querySelectorAll<HTMLElement>("[data-word]")].map((element) => ({
+      element,
+      at: Number(element.dataset["at"]),
+    }));
+
+    whileShown(root, () => {
+      let current: HTMLElement | undefined;
+      root.toggleAttribute("data-playing", true);
+
+      const stop = loop(
+        PLAY_MS,
+        (progress) => {
+          root.style.setProperty("--progress", progress.toFixed(4));
+          let spoken: HTMLElement | undefined;
+          for (const word of words) {
+            const said = word.at <= progress;
+            word.element.toggleAttribute("data-said", said);
+            if (said) spoken = word.element;
+          }
+          if (spoken === current) return;
+          current?.removeAttribute("data-current");
+          spoken?.setAttribute("data-current", "");
+          current = spoken;
+        },
+        REST_MS,
+      );
+
+      return () => {
+        stop();
+        root.removeAttribute("data-playing");
+        root.style.removeProperty("--progress");
+        current?.removeAttribute("data-current");
+      };
+    });
+  }
+</script>

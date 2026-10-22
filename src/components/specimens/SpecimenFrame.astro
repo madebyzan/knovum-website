@@ -1,0 +1,28 @@
+---
+import { tv } from "@/lib/tv";
+
+interface Props {
+  /** The widest the specimen may grow inside its frame. */
+  class?: string;
+}
+
+const frame = tv({
+  slots: {
+    root: "relative isolate flex items-center justify-center overflow-hidden rounded-lg border border-line bg-paper-muted px-4 py-12 sm:px-10 sm:py-16",
+    field: "absolute inset-0 -z-10 dot-field-center",
+    content: "w-full max-w-specimen min-w-0",
+  },
+});
+const styles = frame();
+---
+
+{/*
+  A piece of the interface a feature describes, set on the canvas's dot grid. It illustrates the
+  passage beside it, which says everything it shows, so assistive technology skips it.
+*/}
+<div class={styles.root()} aria-hidden="true">
+  <div class={styles.field()}></div>
+  <div class={styles.content({ class: Astro.props.class })}>
+    <slot />
+  </div>
+</div>

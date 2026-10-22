@@ -1,0 +1,24 @@
+---
+import { LOCALES, localeMeta } from "@/config/locales";
+import { getI18n, homePath } from "@/i18n";
+
+import { navLink } from "../ui/variants";
+
+interface Props {
+  class?: string;
+}
+
+const { locale } = getI18n(Astro);
+const others = LOCALES.filter((candidate) => candidate !== locale);
+---
+
+{others.map((other) => (
+  <a
+    class={navLink({ class: ["text-body-sm", Astro.props.class] })}
+    href={homePath(other)}
+    hreflang={localeMeta[other].tag}
+    lang={localeMeta[other].tag}
+  >
+    {localeMeta[other].shortName}
+  </a>
+))}

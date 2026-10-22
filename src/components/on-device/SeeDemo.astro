@@ -1,0 +1,120 @@
+---
+import { getImage, Image } from "astro:assets";
+
+import photo from "@/assets/on-device/still-life.jpeg";
+import { upscale } from "@/data/sample";
+import { getI18n } from "@/i18n";
+
+/*
+ * See: upscaling as a before-and-after. Left of the divider is the image at its original size,
+ * enlarged with its pixels showing; right of it, the same image at four times the resolution. The
+ * divider is a native range input, so it can be dragged, tapped or moved with the keyboard; while
+ * nobody has touched it, it sweeps on its own.
+ */
+const { see } = getI18n(Astro).t.onDevice;
+
+const originalHeight = Math.round((upscale.originalWidth * photo.height) / photo.width);
+const original = await getImage({ src: photo, width: upscale.originalWidth, format: "webp" });
+const size = (factor: number) =>
+  `${String(upscale.originalWidth * factor)} × ${String(originalHeight * factor)}`;
+
+const label =
+  "absolute top-4 rounded-full bg-paper/85 px-3 py-1.5 text-caption font-medium text-ink backdrop-blur-sm";
+---
+
+<div class="relative size-full overflow-hidden" data-compare>
+  <Image
+    src={photo}
+    alt=""
+    widths={[640, 960, 1280]}
+    sizes="(min-width: 1024px) 42rem, 100vw"
+    class="absolute inset-0 size-full object-cover"
+  />
+  <img
+    src={original.src}
+    alt=""
+    width={upscale.originalWidth}
+    height={originalHeight}
+    class="original absolute inset-0 size-full object-cover [image-rendering:pixelated]"
+  />
+
+  <div class="divider pointer-events-none absolute inset-y-0 w-px bg-ink/80">
+    <span class="absolute top-1/2 left-1/2 grid size-9 -translate-1/2 place-items-center rounded-full border border-ink/20 bg-paper text-ink shadow-frame">
+      <svg viewBox="0 0 16 16" class="size-3.5" fill="currentColor" aria-hidden="true">
+        <path d="M5.5 3.5 1 8l4.5 4.5V3.5Zm5 0v9L15 8l-4.5-4.5Z"></path>
+      </svg>
+    </span>
+  </div>
+
+  <p class={`${label} left-4`}>
+    {see.original} <span class="text-ink-subtle tabular-nums">{size(1)}</span>
+  </p>
+  <p class={`${label} right-4`}>
+    {see.upscaled(upscale.factor)} <span class="text-ink-subtle tabular-nums">{size(upscale.factor)}</span>
+  </p>
+
+  <input
+    type="range"
+    min="0"
+    max="100"
+    step="0.1"
+    value="50"
+    aria-label={see.compare}
+    class="absolute inset-0 size-full cursor-ew-resize appearance-none bg-transparent opacity-0"
+  />
+</div>
+
+<style>
+  [data-compare] {
+    --split: 50%;
+  }
+
+  .original {
+    clip-path: inset(0 calc(100% - var(--split)) 0 0);
+  }
+
+  .divider {
+    left: var(--split);
+  }
+
+  /* The input itself is invisible; its focus shows on the divider's handle. */
+  [data-compare]:has(input:focus-visible) .divider span {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+</style>
+
+<script>
+  import { loop, whileShown } from "@/scripts/playback";
+
+  /** One sweep to each side and back, while nobody has taken hold of the divider, and how far it goes. */
+  const SWEEP_MS = 7000;
+  const REACH = 28;
+
+  for (const root of document.querySelectorAll<HTMLElement>("[data-compare]")) {
+    const input = root.querySelector("input");
+    if (!input) continue;
+
+    const show = (percent: number) => {
+      root.style.setProperty("--split", `${percent.toFixed(2)}%`);
+    };
+    let takenOver = false;
+
+    // Only a person moves the input: setting `value` from script fires no `input` event.
+    input.addEventListener("input", () => {
+      takenOver = true;
+      show(input.valueAsNumber);
+    });
+
+    whileShown(root, () => {
+      if (takenOver) return () => undefined;
+      return loop(SWEEP_MS, (progress) => {
+        if (takenOver) return;
+        // From the middle, out to one side, across to the other and back: one smooth swing.
+        const percent = 50 - REACH * Math.sin(progress * 2 * Math.PI);
+        input.value = String(percent);
+        show(percent);
+      });
+    });
+  }
+</script>

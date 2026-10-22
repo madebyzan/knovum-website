@@ -1,0 +1,41 @@
+---
+import Download from "@/components/sections/Download.astro";
+import Features from "@/components/sections/Features.astro";
+import Hero from "@/components/sections/Hero.astro";
+import OnDevice from "@/components/sections/OnDevice.astro";
+import Providers from "@/components/sections/Providers.astro";
+import Statement from "@/components/sections/Statement.astro";
+import Workflow from "@/components/sections/Workflow.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import { DEFAULT_LOCALE, LOCALES } from "@/config/locales";
+import { getI18n } from "@/i18n";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getLatestRelease } from "@/lib/releases";
+import { siteOrigin } from "@/lib/origin";
+import { softwareApplication } from "@/lib/structured-data";
+
+/** One home page per language: `/` for the default, `/<locale>/` for the others. */
+export function getStaticPaths() {
+  return LOCALES.map((locale) => ({ params: { locale: locale === DEFAULT_LOCALE ? undefined : locale } }));
+}
+
+const { t, tag } = getI18n(Astro);
+const release = await getLatestRelease();
+const structuredData = softwareApplication({
+  description: t.meta.description,
+  languageTag: tag,
+  url: new URL(Astro.url.pathname, siteOrigin(Astro.site)),
+  release,
+});
+---
+
+<BaseLayout>
+  <JsonLd slot="head" data={structuredData} />
+  <Hero release={release} />
+  <Statement />
+  <Features />
+  <Workflow />
+  <OnDevice />
+  <Providers />
+  <Download release={release} />
+</BaseLayout>

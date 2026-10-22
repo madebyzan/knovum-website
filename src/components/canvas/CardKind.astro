@@ -1,0 +1,18 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  /** A Lucide icon name for the kind of object. */
+  icon: string;
+  label: string;
+  aside?: string;
+}
+
+const { icon, label, aside } = Astro.props;
+---
+
+<p class="mb-2.5 flex items-center gap-1.75 text-canvas-xs font-medium text-ink-subtle">
+  <Icon name={`lucide:${icon}`} class="size-3.5 shrink-0" />
+  {label}
+  {aside && <span class="ml-auto font-normal tabular-nums">{aside}</span>}
+</p>

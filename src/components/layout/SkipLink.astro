@@ -1,0 +1,17 @@
+---
+import { getI18n } from "@/i18n";
+import { tv } from "@/lib/tv";
+
+const { t } = getI18n(Astro);
+
+const skipLink = tv({
+  base: [
+    "fixed top-3 left-3 z-60 rounded-md bg-ink px-3.5 py-2 text-label text-paper",
+    "-translate-y-[200%] focus-visible:translate-y-0 motion-safe:transition-transform motion-safe:duration-150",
+  ],
+});
+---
+
+<a class={skipLink()} href="#main">
+  {t.a11y.skipToContent}
+</a>

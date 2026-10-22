@@ -1,0 +1,65 @@
+---
+import { Icon } from "astro-icon/components";
+
+import { getI18n } from "@/i18n";
+import { formatFileSize } from "@/lib/format";
+import { PLATFORMS, type Platform, type Release } from "@/lib/releases";
+
+import { action } from "../ui/variants";
+
+interface Props {
+  platform: Platform;
+  installers: Release["installers"];
+}
+
+const ICONS: Readonly<Record<Platform, string>> = {
+  macos: "simple-icons:apple",
+  windows: "simple-icons:windows",
+};
+
+const { t, tag } = getI18n(Astro);
+const { platform, installers } = Astro.props;
+const { name, requirement } = t.download.platforms[platform];
+---
+
+{/* One platform's installers. The most common machine's comes first and leads visually. */}
+<article class="flex flex-col rounded-lg bg-surface p-6 text-start shadow-panel sm:p-8">
+  <header class="flex items-center gap-4">
+    <span
+      class="grid size-11 shrink-0 place-items-center rounded-md bg-paper-muted text-ink"
+      aria-hidden="true"
+    >
+      <Icon name={ICONS[platform]} class="size-5" />
+    </span>
+    <div>
+      <h3 class="text-subheading">{name}</h3>
+      <p class="mt-0.5 text-body-sm text-ink-subtle">{requirement}</p>
+    </div>
+  </header>
+
+  <ul class="mt-8 grid gap-2.5">
+    {PLATFORMS[platform].map((kind, index) => {
+      const installer = installers[kind];
+      return (
+        <li>
+          <a
+            href={installer.url}
+            class={action({
+              variant: index === 0 ? "primary" : "secondary",
+              class: "h-12 w-full justify-start gap-3 px-4 text-body-sm",
+            })}
+          >
+            <Icon name="lucide:download" class="size-4 shrink-0" aria-hidden="true" />
+            <span>
+              <span class="sr-only">{t.download.downloadFor(name)} </span>
+              {t.download.installers[kind]}
+            </span>
+            <span class="ml-auto font-mono text-caption font-normal opacity-70">
+              {installer.format} · {formatFileSize(installer.size, tag)}
+            </span>
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+</article>

@@ -1,0 +1,32 @@
+{
+  "tag_name": "v0.0.1",
+  "html_url": "https://github.com/madebyzan/knovum/releases/tag/v0.0.1",
+  "published_at": "2026-10-22T02:00:00Z",
+  "assets": [
+    {
+      "name": "Knovum_0.0.1_aarch64.dmg",
+      "browser_download_url": "https://github.com/madebyzan/knovum/releases/download/v0.0.1/Knovum_0.0.1_aarch64.dmg",
+      "size": 118734848
+    },
+    {
+      "name": "Knovum_0.0.1_x64.dmg",
+      "browser_download_url": "https://github.com/madebyzan/knovum/releases/download/v0.0.1/Knovum_0.0.1_x64.dmg",
+      "size": 124518400
+    },
+    {
+      "name": "Knovum_0.0.1_x64-setup.exe",
+      "browser_download_url": "https://github.com/madebyzan/knovum/releases/download/v0.0.1/Knovum_0.0.1_x64-setup.exe",
+      "size": 97517568
+    },
+    {
+      "name": "Knovum_aarch64.app.tar.gz",
+      "browser_download_url": "https://github.com/madebyzan/knovum/releases/download/v0.0.1/Knovum_aarch64.app.tar.gz",
+      "size": 116391936
+    },
+    {
+      "name": "latest.json",
+      "browser_download_url": "https://github.com/madebyzan/knovum/releases/download/v0.0.1/latest.json",
+      "size": 1834
+    }
+  ]
+}

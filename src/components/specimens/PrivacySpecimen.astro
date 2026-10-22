@@ -1,0 +1,39 @@
+---
+import { Icon } from "astro-icon/components";
+
+import { getI18n } from "@/i18n";
+
+import SpecimenFrame from "./SpecimenFrame.astro";
+import { panel, tag } from "./variants";
+
+const { privacy } = getI18n(Astro).t.features;
+---
+
+<SpecimenFrame>
+  <div class={panel({ class: "p-5" })}>
+    <p class="flex items-center gap-2 text-label font-semibold text-ink">
+      <Icon name="lucide:laptop" class="size-4 text-ink-muted" />
+      {privacy.device}
+    </p>
+    <ul class="mt-4 grid grid-cols-2 gap-2">
+      {privacy.parts.map((part) => (
+        <li class="rounded-sm bg-paper-muted px-3.5 py-3">
+          <span class="block text-body-sm font-medium text-ink">{part.name}</span>
+          <span class="block text-caption text-ink-subtle">{part.detail}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  {/* The one way out of the machine: optional, and as narrow as the action that uses it. */}
+  <div class="flex items-center gap-4 py-2 pl-8">
+    <span class="h-14 border-l border-dashed border-line-strong"></span>
+    <span class="text-caption text-ink-subtle">{privacy.boundary}</span>
+  </div>
+
+  <div class={panel({ optional: true, class: "flex items-center gap-2 px-5 py-4" })}>
+    <Icon name="lucide:cloud" class="size-4 text-ink-subtle" />
+    <span class="text-label font-medium text-ink-muted">{privacy.cloud}</span>
+    <span class={tag({ tone: "relation", class: "ml-auto" })}>{privacy.optional}</span>
+  </div>
+</SpecimenFrame>

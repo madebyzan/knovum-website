@@ -1,0 +1,16 @@
+---
+import { SECTION_IDS } from "@/config/navigation";
+import { getI18n } from "@/i18n";
+
+import Section from "../ui/Section.astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+import Timeline from "../ui/Timeline.astro";
+
+const { t } = getI18n(Astro);
+const id = SECTION_IDS.workflow;
+---
+
+<Section id={id} labelledBy={`${id}-title`} tone="muted" divided>
+  <SectionHeading id={`${id}-title`} kicker={t.nav.sections.workflow} title={t.workflow.title} />
+  <Timeline steps={t.workflow.steps} />
+</Section>

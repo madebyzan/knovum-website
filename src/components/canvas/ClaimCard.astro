@@ -1,0 +1,22 @@
+---
+import { getI18n } from "@/i18n";
+
+import CanvasCard from "./CanvasCard.astro";
+
+interface Props {
+  class: string;
+}
+
+const { claim } = getI18n(Astro).t.canvas;
+---
+
+<CanvasCard class={Astro.props.class} selected>
+  <p class="mb-2.5 inline-block rounded-canvas-sm bg-ink/6 px-2 py-0.5 text-canvas-xs font-semibold tracking-wide text-ink-muted">
+    {claim.kind}
+  </p>
+  <p class="text-canvas-md leading-snug font-medium text-ink">{claim.text}</p>
+  <p class="mt-2.5 flex items-center gap-1.5 text-canvas-xs text-ink-subtle">
+    <span class="size-1.5 rounded-full bg-positive"></span>
+    {claim.support}
+  </p>
+</CanvasCard>

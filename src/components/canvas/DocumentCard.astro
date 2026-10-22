@@ -1,0 +1,55 @@
+---
+import { documentSources } from "@/data/sample";
+import { getI18n } from "@/i18n";
+
+import CanvasCard from "./CanvasCard.astro";
+import CardKind from "./CardKind.astro";
+
+interface Props {
+  class: string;
+  /** The `enter-*` step at which the document's trail appears, after the document itself. */
+  trailEnter: string;
+}
+
+const { canvas } = getI18n(Astro).t;
+const { document } = canvas;
+---
+
+<CanvasCard class={Astro.props.class}>
+  <CardKind icon="file-text" label={document.kind} />
+  <p class="mt-1 mb-3.5 font-heading text-canvas-xl font-medium text-ink">{document.title}</p>
+  <p class="text-ink-muted">
+    {document.paragraphs[0]}
+    <sup class="ml-0.5 text-canvas-2xs font-semibold text-accent-ink">1, 2</sup>
+  </p>
+  <p class="mt-2.5 text-ink-muted">
+    {document.paragraphs[1]}
+    <sup class="ml-0.5 text-canvas-2xs font-semibold text-accent-ink">3</sup>
+  </p>
+  <div class="mt-4 grid gap-2.25">
+    <span class="h-1.75 rounded-full bg-ink/7"></span>
+    <span class="h-1.75 rounded-full bg-ink/7"></span>
+    <span class="h-1.75 w-[62%] rounded-full bg-ink/7"></span>
+  </div>
+
+  <div
+    class:list={[
+      "absolute inset-x-4.5 bottom-4.5 rounded-canvas-md bg-paper-muted px-4 py-3.5 motion-safe:animate-fade",
+      Astro.props.trailEnter,
+    ]}
+  >
+    <p class="mb-2 text-canvas-sm font-semibold text-ink">{document.trail}</p>
+    <ol>
+      {documentSources.map(({ source, revision }, index) => (
+        <li class="flex items-center gap-2 text-canvas-sm leading-loose text-ink-muted">
+          <span class="grid size-4 place-items-center rounded-canvas-sm bg-accent/12 text-canvas-2xs leading-none font-semibold text-accent-ink">
+            {index + 1}
+          </span>
+          {canvas[source].kind}
+          <span class="ml-auto font-mono text-canvas-xs text-ink-subtle">{revision}</span>
+        </li>
+      ))}
+    </ol>
+    <p class="mt-2 border-t border-line pt-2 text-canvas-xs text-ink-subtle">{document.trailDetail}</p>
+  </div>
+</CanvasCard>

@@ -1,0 +1,51 @@
+---
+import { localeMeta } from "@/config/locales";
+import { citedMoment } from "@/data/sample";
+import { getI18n } from "@/i18n";
+
+import Waveform from "../canvas/Waveform.astro";
+import SpecimenFrame from "./SpecimenFrame.astro";
+import { citationMark, panel, tag } from "./variants";
+
+const { locale, t } = getI18n(Astro);
+const { canvas } = t;
+const { citation } = t.features;
+const [recording, survey] = citation.sources;
+---
+
+<SpecimenFrame>
+  <div class={panel({ class: "p-6" })}>
+    <p class="text-label text-ink-subtle">{canvas.note.title}</p>
+    <p class="mt-3 font-heading text-heading text-ink">
+      {citation.answer[0]}
+      <sup class={citationMark({ class: "ml-1 align-super" })}>1</sup>
+      {localeMeta[locale].sentenceGap}
+      {citation.answer[1]}
+      <sup class={citationMark({ class: "ml-1 align-super" })}>2</sup>
+    </p>
+
+    <ol class="mt-6 grid gap-2.5">
+      <li class="rounded-md bg-paper-muted p-4">
+        <p class="flex items-center gap-2.5 text-label text-ink">
+          <span class={citationMark()}>1</span>
+          <span class="font-medium">{recording.kind}</span>
+          <span class="text-ink-subtle">{recording.title}</span>
+          <span class="ml-auto font-mono text-caption text-ink-subtle">{recording.at}</span>
+        </p>
+        <Waveform highlight={citedMoment.waveform} class="mt-3.5 h-7" />
+        <p class="mt-3 text-body-sm text-ink-muted">{canvas.recording.quote}</p>
+      </li>
+      <li class="flex flex-wrap items-center gap-x-2.5 gap-y-2 rounded-md bg-paper-muted p-4 text-label text-ink">
+        <span class={citationMark()}>2</span>
+        <span class="font-medium">{survey.kind}</span>
+        <span class="text-ink-subtle">
+          {survey.title} · {survey.at}
+        </span>
+        <span class={tag({ tone: "emphasis", class: "ml-auto" })}>
+          <span class="size-1.5 rounded-full bg-ink" />
+          {citation.changed}
+        </span>
+      </li>
+    </ol>
+  </div>
+</SpecimenFrame>

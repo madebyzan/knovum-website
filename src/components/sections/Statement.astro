@@ -1,0 +1,16 @@
+---
+import { getI18n } from "@/i18n";
+import { splitWords } from "@/lib/words";
+
+import Section from "../ui/Section.astro";
+
+const { t, tag } = getI18n(Astro);
+const tokens = splitWords(t.statement, tag);
+---
+
+<Section class="pb-0">
+  {/* Each word is its own element so the illuminate scene can light it as the reader reaches it. */}
+  <p class="max-w-statement font-heading text-statement" data-illuminate>
+    {tokens.map((token) => (token.word ? <span data-word>{token.text}</span> : token.text))}
+  </p>
+</Section>

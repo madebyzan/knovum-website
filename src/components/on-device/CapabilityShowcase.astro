@@ -1,0 +1,189 @@
+---
+import { CAPABILITY_GROUPS, capabilitiesIn, type CapabilityGroup } from "@/data/capabilities";
+import { upscale } from "@/data/sample";
+import { getI18n } from "@/i18n";
+import { formatOrdinal } from "@/lib/format";
+
+import CapabilityList from "./CapabilityList.astro";
+import DemoWindow from "./DemoWindow.astro";
+import FindDemo from "./FindDemo.astro";
+import ListenDemo from "./ListenDemo.astro";
+import SeeDemo from "./SeeDemo.astro";
+
+const { t } = getI18n(Astro);
+const { onDevice } = t;
+
+/** Each group's demo and the title its window bears. A new group must say how it is shown. */
+type Demo = typeof ListenDemo;
+const demos: Readonly<Record<CapabilityGroup, { Demo: Demo; title: string }>> = {
+  audio: { Demo: ListenDemo, title: `${t.canvas.recording.title} · ${t.canvas.recording.duration}` },
+  image: { Demo: SeeDemo, title: upscale.file },
+  search: { Demo: FindDemo, title: t.canvas.space },
+};
+---
+
+{/*
+  The groups as tabs beside one large demo. `tab-container` slots only the selected panel; until it
+  is defined, or without script, every panel shows in turn and the tabs are hidden. While nobody has
+  chosen a tab, the groups take turns, each tab's rule filling as its turn runs.
+*/}
+<tab-container
+  data-autoplay
+  class="grid gap-y-10 lg:grid-cols-aside lg:gap-x-split [&::part(tablist-wrapper)]:flex-col [&::part(tablist-wrapper)]:gap-10 lg:[&::part(tablist-wrapper)]:gap-14"
+>
+  <slot />
+
+  <div role="tablist" aria-label={onDevice.title} class="tablist flex border-b border-line lg:flex-col">
+    {CAPABILITY_GROUPS.map((group, index) => (
+      <button
+        type="button"
+        role="tab"
+        id={`capability-tab-${group}`}
+        aria-controls={`capability-panel-${group}`}
+        aria-selected={index === 0 ? "true" : "false"}
+        class="group relative flex-1 border-t border-line py-4 text-start lg:py-6"
+      >
+        <span class="flex items-baseline gap-4">
+          <span class="hidden font-mono text-caption text-ink-subtle lg:inline" aria-hidden="true">
+            {formatOrdinal(index)}
+          </span>
+          <span class="font-heading text-subheading text-ink-subtle transition-colors duration-300 group-hover:text-ink-muted group-aria-selected:text-ink lg:text-heading">
+            {onDevice.groups[group].title}
+          </span>
+          <span class="ml-auto hidden font-mono text-caption text-ink-subtle tabular-nums lg:inline">
+            {capabilitiesIn(group).length}
+          </span>
+        </span>
+        <span class="body hidden lg:grid">
+          <span class="overflow-hidden">
+            <span class="block pt-2.5 text-body-sm text-ink-muted lg:pl-10">
+              {onDevice.groups[group].body}
+            </span>
+          </span>
+        </span>
+        <span
+          class="absolute inset-x-0 -top-px h-px origin-left scale-x-0 bg-ink group-aria-selected:scale-x-100"
+          aria-hidden="true"
+          data-progress
+        ></span>
+      </button>
+    ))}
+  </div>
+
+  {CAPABILITY_GROUPS.map((group) => {
+    const { Demo, title } = demos[group];
+    return (
+      <div
+        role="tabpanel"
+        id={`capability-panel-${group}`}
+        aria-labelledby={`capability-tab-${group}`}
+        class="panel min-w-0 lg:col-start-2 lg:row-start-1 motion-safe:animate-fade"
+      >
+        <div class="h-104 sm:h-auto sm:aspect-8/5">
+          <DemoWindow title={title}>
+            <Demo />
+          </DemoWindow>
+        </div>
+        <CapabilityList group={group} />
+      </div>
+    );
+  })}
+</tab-container>
+
+<style>
+  /* A tab's description opens when it is selected; closed ones take no room. */
+  .body {
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 450ms var(--ease-standard);
+  }
+
+  [aria-selected="true"] .body {
+    grid-template-rows: 1fr;
+  }
+
+  @media (scripting: none) {
+    .tablist {
+      display: none;
+    }
+  }
+
+  @media (scripting: enabled) {
+    tab-container:not(:defined) > .panel:not(:first-of-type) {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import "@github/tab-container-element";
+  import type { TabContainerElement } from "@github/tab-container-element";
+
+  import { whileShown } from "@/scripts/playback";
+
+  /** How long each group's turn lasts while the groups take turns. */
+  const TURN_MS = 10_000;
+  /** Where the tabs stack into a column (Tailwind's `lg`), and arrow keys follow suit. */
+  const COLUMN = matchMedia("(min-width: 64rem)");
+
+  for (const container of document.querySelectorAll<TabContainerElement>("tab-container[data-autoplay]")) {
+    const tabs = [...container.querySelectorAll<HTMLElement>("[role=tab]")];
+    const tablist = container.querySelector("[role=tablist]");
+
+    // The orientation is the layout's: a column on wide screens, a row on narrow ones.
+    const orient = () =>
+      tablist?.setAttribute("aria-orientation", COLUMN.matches ? "vertical" : "horizontal");
+    orient();
+    COLUMN.addEventListener("change", orient);
+
+    // A turn fills the selected tab's rule with a native animation: cancelling it leaves no trace,
+    // so the rule falls back to its resting state, full for the selected tab and empty for the rest.
+    let turn: Animation | undefined;
+    let shown = false;
+    let chosen = false;
+
+    const endTurn = () => {
+      turn?.cancel();
+      turn = undefined;
+    };
+
+    const startTurn = () => {
+      endTurn();
+      if (!shown || chosen) return;
+      const rule = tabs[container.selectedTabIndex]?.querySelector("[data-progress]");
+      if (!rule) return;
+      const current = rule.animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], {
+        duration: TURN_MS,
+        easing: "linear",
+      });
+      turn = current;
+      current.finished.then(
+        () => {
+          if (turn === current)
+            container.selectTab((container.selectedTabIndex + 1) % tabs.length, { focus: false });
+        },
+        // A cancelled turn rejects; it has already been replaced or ended.
+        () => undefined,
+      );
+    };
+
+    // Once a reader picks a tab, it is theirs: the groups stop taking turns for good.
+    const choose = () => {
+      chosen = true;
+      endTurn();
+    };
+    for (const tab of tabs) {
+      tab.addEventListener("pointerdown", choose);
+      tab.addEventListener("keydown", choose);
+    }
+    container.addEventListener("tab-container-changed", startTurn);
+
+    whileShown(container, () => {
+      shown = true;
+      startTurn();
+      return () => {
+        shown = false;
+        endTurn();
+      };
+    });
+  }
+</script>

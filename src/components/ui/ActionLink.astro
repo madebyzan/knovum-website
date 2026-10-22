@@ -1,0 +1,21 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Icon } from "astro-icon/components";
+
+import { action, type ActionVariants } from "./variants";
+
+type Props = Omit<HTMLAttributes<"a">, "class"> &
+  ActionVariants & {
+    href: string;
+    /** An Iconify name such as `simple-icons:github`, drawn before the label. */
+    icon?: string;
+    class?: string;
+  };
+
+const { variant, size, icon, class: className, ...attributes } = Astro.props;
+---
+
+<a class={action({ variant, size, class: className })} {...attributes}>
+  {icon && <Icon name={icon} class="size-4 shrink-0" aria-hidden="true" />}
+  <slot />
+</a>

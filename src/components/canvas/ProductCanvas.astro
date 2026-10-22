@@ -1,0 +1,114 @@
+---
+import { Icon } from "astro-icon/components";
+
+import { getI18n } from "@/i18n";
+import { tv } from "@/lib/tv";
+
+import CaptureCard from "./CaptureCard.astro";
+import ClaimCard from "./ClaimCard.astro";
+import DocumentCard from "./DocumentCard.astro";
+import NoteCard from "./NoteCard.astro";
+import OutlineSidebar from "./OutlineSidebar.astro";
+import RecordingCard from "./RecordingCard.astro";
+
+const { t } = getI18n(Astro);
+
+/*
+ * A faithful reconstruction of a Space rather than a screenshot, so it stays sharp at any size,
+ * follows the reader's language and colour scheme, and costs no image bytes. Geometry is in the
+ * stage's 1440 × 700 design units (see `canvas-stage`): `left-14` is 56, `w-67.5` is 270. The window
+ * is the app's own: a toolbar, the Outline sidebar (240 wide) and the canvas (1200 × 660) beside it.
+ *
+ * It assembles in the order the work happens: the sources arrive, their relations to the claim are
+ * drawn, the claim is selected, and the document made from it appears with its trail. Each part's
+ * `enter-*` class is its step; class names are written out whole so Tailwind can find them.
+ */
+const relationLabels = ["left-93 top-53.5", "left-85 top-111.5", "left-141.5 top-76.5"];
+
+/** Paths in the canvas area's 1200 × 660 coordinates: three sources supporting the claim, then the
+ * derivation of the document from it. */
+const relations = [
+  { path: "M326 160 C 400 170, 470 250, 520 356", kind: "supports", enter: "enter-5" },
+  { path: "M326 426 C 370 426, 390 432, 428 432", kind: "supports", enter: "enter-5" },
+  { path: "M556 280 C 556 310, 556 330, 556 356", kind: "supports", enter: "enter-5" },
+  { path: "M682 430 C 730 430, 740 360, 784 360", kind: "derives", enter: "enter-7" },
+] as const;
+
+/** When each pulse first sets off, after the canvas has assembled; written whole for Tailwind. */
+const flowDelays = ["enter-12", "enter-15", "enter-18", "enter-21"];
+
+const relation = tv({
+  base: "fill-none [stroke-dasharray:1] motion-safe:animate-draw",
+  variants: {
+    kind: {
+      supports: "stroke-ink/30 stroke-[1.25]",
+      derives: "stroke-ink-muted stroke-[1.5]",
+    },
+  },
+});
+---
+
+<div
+  data-live
+  role="img"
+  aria-label={t.a11y.productIllustration}
+  class="@container overflow-hidden rounded-lg border border-line-strong bg-surface shadow-frame"
+>
+  <div class="canvas-stage" aria-hidden="true">
+    <div class="relative flex h-10 items-center justify-center border-b border-line bg-paper-muted text-canvas-sm font-medium text-ink-muted">
+      <span class="absolute left-4 flex gap-2">
+        <span class="size-3 rounded-full bg-ink/14"></span>
+        <span class="size-3 rounded-full bg-ink/14"></span>
+        <span class="size-3 rounded-full bg-ink/14"></span>
+      </span>
+      {t.canvas.space}
+      <span class="absolute right-4 flex gap-4 text-ink-subtle">
+        <Icon name="lucide:search" class="size-4" />
+        <Icon name="lucide:plus" class="size-4" />
+      </span>
+    </div>
+
+    <OutlineSidebar class="absolute top-10 bottom-0 left-0 w-60" />
+
+    <div class="absolute top-10 right-0 bottom-0 left-60 canvas-dots bg-paper">
+      <svg class="absolute inset-0 size-full overflow-visible" viewBox="0 0 1200 660">
+        {relations.map(({ path, kind, enter }) => (
+          <path d={path} pathLength="1" class={relation({ kind, class: enter })} />
+        ))}
+        {/* Once drawn, each relation carries a pulse from its source to its target: the work moving
+        through the Space. Staggered so no two arrive together. */}
+        {relations.map(({ path }, index) => (
+          <path
+            d={path}
+            pathLength="1"
+            class:list={[
+              "fill-none stroke-accent stroke-2 [stroke-dasharray:0.08_1] opacity-0 motion-safe:animate-flow motion-safe:opacity-100",
+              flowDelays[index],
+            ]}
+            data-loop
+          />
+        ))}
+        {/* The derivation's arrowhead, drawn on its own so it arrives as its line finishes. */}
+        <path d="M777 354.5 L788 360 L777 365.5 Z" class="fill-ink-muted motion-safe:animate-fade enter-9" />
+      </svg>
+
+      {relationLabels.map((position) => (
+        <span
+          class:list={[
+            "absolute rounded-canvas-sm border border-line bg-paper px-1.75 py-0.5 text-canvas-xs leading-snug text-ink-subtle",
+            "motion-safe:animate-fade enter-7",
+            position,
+          ]}
+        >
+          {t.canvas.relation}
+        </span>
+      ))}
+
+      <NoteCard class="top-16 left-14 h-44 w-67.5 enter-2" />
+      <RecordingCard class="top-82.5 left-14 h-49 w-67.5 enter-3" />
+      <CaptureCard class="top-10 left-100 h-60 w-78 enter-4" />
+      <ClaimCard class="top-89 left-107 h-37.5 w-63.5 enter-6" />
+      <DocumentCard class="top-14 left-196.5 h-137 w-90.5 px-6.5 py-5.5 enter-8" trailEnter="enter-10" />
+    </div>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+---
+import ActionLink from "@/components/ui/ActionLink.astro";
+import Section from "@/components/ui/Section.astro";
+import { DEFAULT_LOCALE, LOCALES, localeMeta } from "@/config/locales";
+import { site } from "@/config/site";
+import { getDictionary, homePath } from "@/i18n";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+// One page serves every unknown address, so it speaks every language rather than guessing one.
+const notices = LOCALES.map((locale) => ({
+  locale,
+  tag: localeMeta[locale].tag,
+  copy: getDictionary(locale).notFound,
+}));
+const title = `${getDictionary(DEFAULT_LOCALE).notFound.title} — ${site.name}`;
+---
+
+<BaseLayout title={title} alternates={false} noindex>
+  <Section class="min-h-[60svh]" containerClass="grid gap-16">
+    <p class="font-mono text-label text-ink-subtle">404</p>
+    {notices.map(({ locale, tag, copy }, index) => (
+      <div lang={tag}>
+        {index === 0 ? (
+          <h1 class="max-w-title font-heading text-title">{copy.title}</h1>
+        ) : (
+          <h2 class="max-w-title font-heading text-title">{copy.title}</h2>
+        )}
+        <p class="mt-5 max-w-measure text-lead text-ink-muted">{copy.body}</p>
+        <ActionLink href={homePath(locale)} variant={index === 0 ? "primary" : "secondary"} class="mt-8">
+          {copy.back}
+        </ActionLink>
+      </div>
+    ))}
+  </Section>
+</BaseLayout>

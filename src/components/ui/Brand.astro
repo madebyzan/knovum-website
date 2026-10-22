@@ -1,0 +1,41 @@
+---
+import { Image } from "astro:assets";
+
+import appIcon from "@/assets/app-icon.png";
+import { site } from "@/config/site";
+import { tv, type VariantProps } from "@/lib/tv";
+
+const brand = tv({
+  slots: {
+    root: "inline-flex items-center font-semibold tracking-snug text-ink",
+    mark: "rounded-[22%]",
+  },
+  variants: {
+    size: {
+      md: { root: "gap-2.5 text-body leading-none", mark: "size-7" },
+      sm: { root: "gap-2 text-body-sm leading-none", mark: "size-6" },
+    },
+  },
+  defaultVariants: { size: "md" },
+});
+
+const pixels = { md: 28, sm: 24 } as const;
+
+type Props = VariantProps<typeof brand>;
+
+const { size = "md" } = Astro.props;
+const styles = brand({ size });
+---
+
+<span class={styles.root()}>
+  <Image
+    src={appIcon}
+    width={pixels[size]}
+    height={pixels[size]}
+    densities={[1, 2]}
+    alt=""
+    class={styles.mark()}
+    loading="eager"
+  />
+  <span>{site.name}</span>
+</span>

@@ -1,0 +1,21 @@
+---
+interface Props {
+  /** What the window shows, as its title bar names it. */
+  title: string;
+}
+---
+
+{/* A Knovum window, as the app draws one: a quiet title bar over its content. */}
+<div class="flex h-full flex-col overflow-hidden rounded-lg border border-line-strong bg-paper shadow-frame">
+  <div class="relative flex h-10 shrink-0 items-center justify-center border-b border-line text-caption font-medium text-ink-muted">
+    <span class="absolute left-4 flex gap-1.5" aria-hidden="true">
+      <span class="size-2.5 rounded-full bg-ink/15"></span>
+      <span class="size-2.5 rounded-full bg-ink/15"></span>
+      <span class="size-2.5 rounded-full bg-ink/15"></span>
+    </span>
+    {Astro.props.title}
+  </div>
+  <div class="relative min-h-0 flex-1">
+    <slot />
+  </div>
+</div>

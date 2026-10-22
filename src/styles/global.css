@@ -1,0 +1,417 @@
+@import "tailwindcss";
+
+/*
+ * The design system, declared once. Tailwind's default palette, type scale, radii and shadows are
+ * cleared so that only these decisions exist: nothing outside this file can reach for a colour or a
+ * size the site does not use.
+ *
+ * Colours come from the Knovum desktop app (src/styles/tokens.css): cool near-neutral greys at hue
+ * 264 and one blue that marks selection, focus and links only. Ink on paper carries the page.
+ */
+@theme {
+  --color-*: initial;
+  --color-ink: oklch(0.24 0.006 264);
+  --color-ink-muted: oklch(0.44 0.007 264);
+  --color-ink-subtle: oklch(0.52 0.006 264);
+  /* Words not yet reached by the reader, in large type only: 3.3:1 on paper, the large-text minimum. */
+  --color-ink-faint: oklch(0.63 0.006 264);
+  --color-paper: oklch(0.985 0.0015 264);
+  --color-paper-muted: oklch(0.963 0.002 264);
+  --color-surface: oklch(1 0 0);
+  --color-line: oklch(0.22 0.006 264 / 0.1);
+  --color-line-strong: oklch(0.22 0.006 264 / 0.18);
+  --color-accent: oklch(0.623 0.214 259.8);
+  /* The accent dark enough to set small text in (≥ 4.5:1 on surface and on its own 12% tint). */
+  --color-accent-ink: oklch(0.5 0.2 260);
+  --color-positive: oklch(0.6 0.13 155);
+
+  /* The one band in the opposite tone. `tone-inverse` maps the palette above onto these. */
+  --color-inverse-ink: oklch(0.95 0.004 264);
+  --color-inverse-ink-muted: oklch(0.76 0.008 264);
+  --color-inverse-ink-subtle: oklch(0.66 0.008 264);
+  --color-inverse-paper: oklch(0.2 0.006 264);
+  --color-inverse-line: oklch(1 0 0 / 0.1);
+  --color-inverse-line-strong: oklch(1 0 0 / 0.16);
+
+  --font-*: initial;
+  --font-sans:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --font-heading: var(--font-source-serif), "Iowan Old Style", Georgia, serif;
+  --font-mono: ui-monospace, "SF Mono", "SFMono-Regular", "Cascadia Mono", Consolas, monospace;
+
+  /* Type roles. Each carries its own leading, tracking and weight, so a role is one class. */
+  --text-*: initial;
+  --text-display: clamp(3.25rem, 8.4vw, 7.5rem);
+  --text-display--line-height: 0.94;
+  --text-display--letter-spacing: -0.036em;
+  --text-display--font-weight: 400;
+  /* A figure set as the headline of its section, larger than any heading. */
+  --text-numeral: clamp(8rem, 22vw, 17rem);
+  --text-numeral--line-height: 0.8;
+  --text-numeral--letter-spacing: -0.06em;
+  --text-numeral--font-weight: 300;
+  --text-title: clamp(2rem, 4.4vw, 3.5rem);
+  --text-title--line-height: 1.08;
+  --text-title--letter-spacing: -0.02em;
+  --text-title--font-weight: 400;
+  --text-statement: clamp(1.625rem, 3.3vw, 2.625rem);
+  --text-statement--line-height: 1.32;
+  --text-statement--letter-spacing: -0.012em;
+  --text-statement--font-weight: 400;
+  --text-heading: clamp(1.375rem, 2vw, 1.625rem);
+  --text-heading--line-height: 1.25;
+  --text-heading--letter-spacing: -0.01em;
+  --text-heading--font-weight: 500;
+  --text-subheading: 1.125rem;
+  --text-subheading--line-height: 1.4;
+  --text-subheading--font-weight: 600;
+  --text-lead: clamp(1.125rem, 1.6vw, 1.3125rem);
+  --text-lead--line-height: 1.6;
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.6;
+  --text-body-sm: 0.9375rem;
+  --text-body-sm--line-height: 1.6;
+  --text-label: 0.875rem;
+  --text-label--line-height: 1.45;
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.45;
+
+  --tracking-*: initial;
+  --tracking-snug: -0.01em;
+  --tracking-wide: 0.02em;
+
+  --spacing-gutter: clamp(1.25rem, 5vw, 3rem);
+  --spacing-section: clamp(6rem, 13vw, 10.5rem);
+  --spacing-hero: clamp(2.5rem, 4.5vw, 4rem);
+  --spacing-header: 4rem;
+  --spacing-split: clamp(3rem, 7vw, 7rem);
+  /* Where a sticky column rests: clear of the header, with room to breathe. */
+  --spacing-sticky: calc(var(--spacing-header) + 3rem);
+
+  --container-*: initial;
+  --container-page: calc(76rem + var(--spacing-gutter) * 2);
+  /* Measures are in em, so they follow the text they hold. */
+  --container-title: 18ch;
+  --container-measure: 36em;
+  --container-statement: 30em;
+  --container-passage: 32em;
+  /* The widest a feature specimen grows inside its frame. */
+  --container-specimen: 30rem;
+  /* The row of platform cards a visitor downloads from. */
+  --container-downloads: 54rem;
+
+  --radius-*: initial;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.875rem;
+  --radius-full: 9999px;
+
+  --shadow-*: initial;
+  --shadow-frame: 0 1px 2px rgb(15 23 42 / 0.04), 0 40px 90px -50px rgb(15 23 42 / 0.32);
+  /* A piece of interface resting on a surface, at page scale. */
+  --shadow-panel:
+    0 0 0 1px var(--color-line), 0 1px 2px rgb(15 23 42 / 0.05), 0 14px 32px -18px rgb(15 23 42 / 0.2);
+
+  --ease-*: initial;
+  --ease-standard: cubic-bezier(0.22, 0.72, 0, 1);
+
+  /* Entrances, played once. They are applied with `motion-safe:`, so they never run for a reader who
+   * has asked for less motion; `enter-*` sets each part's place in the sequence. */
+  --animate-*: initial;
+  --animate-settle: settle 900ms var(--ease-standard) both;
+  --animate-fade: fade 700ms var(--ease-standard) both;
+  --animate-draw: draw 1200ms var(--ease-standard) both;
+  /* A pulse travelling a relation line, for as long as the canvas is on screen. For paths with
+   * `pathLength="1"` and a dash array of `0.08 1`: the pulse enters at the start and leaves at the end. */
+  --animate-flow: flow 3.2s cubic-bezier(0.45, 0, 0.55, 1) infinite backwards;
+
+  @keyframes settle {
+    from {
+      opacity: 0;
+      translate: 0 0.875rem;
+    }
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes flow {
+    from {
+      stroke-dashoffset: 0.08;
+    }
+    to {
+      stroke-dashoffset: -1;
+    }
+  }
+
+  /* For paths with `pathLength="1"` and a dash array of 1: the stroke draws itself from its start. */
+  @keyframes draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+}
+
+/*
+ * Inside the product canvas one design unit is 1/1440 of the stage, and `--spacing` is redefined as
+ * four of them. Ordinary spacing utilities therefore measure the illustration in the design's own
+ * pixels (`w-67.5` is 270), and the whole drawing scales with its frame. These sizes are inlined so
+ * they resolve against the stage's unit, not the root's.
+ */
+@theme inline {
+  --text-canvas-2xs: calc(var(--canvas-unit) * 10);
+  --text-canvas-xs: calc(var(--canvas-unit) * 11.5);
+  --text-canvas-sm: calc(var(--canvas-unit) * 12.5);
+  --text-canvas-md: calc(var(--canvas-unit) * 15.5);
+  --text-canvas-lg: calc(var(--canvas-unit) * 16.5);
+  --text-canvas-xl: calc(var(--canvas-unit) * 26);
+  --radius-canvas-xs: calc(var(--canvas-unit) * 2);
+  --radius-canvas-sm: calc(var(--canvas-unit) * 4);
+  --radius-canvas-md: calc(var(--canvas-unit) * 8);
+  --radius-canvas-lg: calc(var(--canvas-unit) * 10);
+  --shadow-canvas-card:
+    0 0 0 1px var(--color-line), 0 1px 2px rgb(15 23 42 / 0.05),
+    0 calc(var(--canvas-unit) * 8) calc(var(--canvas-unit) * 20) calc(var(--canvas-unit) * -12)
+      rgb(15 23 42 / 0.16);
+  --shadow-canvas-selected:
+    0 0 0 calc(var(--canvas-unit) * 2) var(--color-accent),
+    0 calc(var(--canvas-unit) * 10) calc(var(--canvas-unit) * 24) calc(var(--canvas-unit) * -12)
+      rgb(15 23 42 / 0.2);
+}
+
+@layer theme {
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-ink: oklch(0.94 0.004 264);
+      --color-ink-muted: oklch(0.77 0.008 264);
+      --color-ink-subtle: oklch(0.67 0.008 264);
+      --color-ink-faint: oklch(0.53 0.008 264);
+      --color-paper: oklch(0.175 0.005 264);
+      --color-paper-muted: oklch(0.205 0.006 264);
+      --color-surface: oklch(0.235 0.006 264);
+      --color-line: oklch(1 0 0 / 0.08);
+      --color-line-strong: oklch(1 0 0 / 0.15);
+      --color-accent: oklch(0.707 0.165 254.6);
+      --color-accent-ink: oklch(0.78 0.14 254.6);
+      --color-positive: oklch(0.74 0.15 155);
+      --color-inverse-paper: oklch(0.135 0.004 264);
+    }
+  }
+
+  /*
+   * Chinese sets in the system sans: a CJK webfont costs megabytes, and Windows ships no serif that
+   * holds display sizes. PingFang and YaHei at weight 600 do, with more leading than Latin needs.
+   */
+  :root:lang(zh-CN) {
+    --font-heading: var(--font-sans);
+    --container-title: 16em;
+    --container-statement: 24em;
+    --text-display: clamp(2.75rem, 7.8vw, 7rem);
+    --text-display--line-height: 1.1;
+    --text-display--letter-spacing: 0.005em;
+    --text-display--font-weight: 600;
+    --text-title: clamp(1.875rem, 3.8vw, 3rem);
+    --text-title--line-height: 1.25;
+    --text-title--letter-spacing: 0.005em;
+    --text-title--font-weight: 600;
+    --text-statement: clamp(1.375rem, 2.6vw, 2.125rem);
+    --text-statement--line-height: 1.6;
+    --text-statement--letter-spacing: 0.01em;
+    --text-statement--font-weight: 500;
+    --text-heading--letter-spacing: 0;
+    --text-heading--font-weight: 600;
+    --text-lead--line-height: 1.75;
+    --text-body--line-height: 1.75;
+    --text-body-sm--line-height: 1.75;
+  }
+}
+
+@layer base {
+  html {
+    scroll-padding-top: calc(var(--spacing-header) + 1.5rem);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p,
+  li,
+  dd,
+  figcaption {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklch, var(--color-accent) 22%, transparent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* The main landmark takes focus from the skip link; it should not draw a ring when it does. */
+  main:focus {
+    outline: none;
+  }
+}
+
+/* Swaps the palette for the band in the opposite tone; components inside need no tone of their own. */
+@utility tone-inverse {
+  --color-ink: var(--color-inverse-ink);
+  --color-ink-muted: var(--color-inverse-ink-muted);
+  --color-ink-subtle: var(--color-inverse-ink-subtle);
+  --color-paper: var(--color-inverse-paper);
+  --color-line: var(--color-inverse-line);
+  --color-line-strong: var(--color-inverse-line-strong);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+}
+
+/* Two-column compositions: a narrow heading beside its content, and copy beside a short aside. */
+@utility grid-cols-aside {
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+}
+
+@utility grid-cols-lead {
+  grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+}
+
+@utility canvas-stage {
+  --canvas-unit: calc(100cqw / 1440);
+  --spacing: calc(var(--canvas-unit) * 4);
+  position: relative;
+  aspect-ratio: 1440 / 700;
+  font-size: calc(var(--canvas-unit) * 14);
+  line-height: 1.45;
+
+  /* Narrow frames keep the drawing at a readable scale and show its middle — the sources meeting the
+   * claim — rather than shrinking its text past reading. */
+  @variant max-md {
+    --canvas-unit: calc(56rem / 1200);
+    width: calc(var(--canvas-unit) * 1440);
+    margin-inline-start: calc(var(--canvas-unit) * -470);
+  }
+}
+
+@utility canvas-dots {
+  background-image: radial-gradient(
+    circle,
+    var(--color-line-strong) calc(var(--canvas-unit) * 1),
+    transparent calc(var(--canvas-unit) * 1.2)
+  );
+  background-size: calc(var(--canvas-unit) * 24) calc(var(--canvas-unit) * 24);
+}
+
+/*
+ * The canvas's dot grid at page scale, fading out from one edge: the page opens on the surface the
+ * product is made of, and closes on it. `dot-field-top` and `dot-field-bottom` name the edge.
+ */
+@utility dot-field-* {
+  background-image: radial-gradient(circle, var(--color-line-strong) 1px, transparent 1.25px);
+  background-size: 1.5rem 1.5rem;
+  background-position: 50% 0;
+  mask-image: radial-gradient(
+    ellipse 72% 70% at --value("top", "bottom", "center"),
+    #000 15%,
+    transparent 100%
+  );
+}
+
+/* A part's place in an entrance sequence: `enter-0` starts first, each step after it a beat later. */
+@utility enter-* {
+  animation-delay: calc(--value(integer) * 120ms + 200ms);
+}
+
+/*
+ * Motion that follows the reader: content settles in once as it arrives, and three scroll scenes
+ * (below) tie a part of the page to the reader's position. Every resting state is the finished one;
+ * the starting states apply only when script runs to advance them and the reader allows motion.
+ */
+@property --stage-tilt {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+@layer components {
+  @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+    [data-reveal] {
+      transition:
+        opacity 900ms var(--ease-standard),
+        translate 900ms var(--ease-standard);
+    }
+
+    [data-reveal]:not([data-revealed]) {
+      opacity: 0;
+      translate: 0 1.25rem;
+    }
+
+    [data-reveal-stagger] > [data-reveal]:nth-child(2) {
+      transition-delay: 80ms;
+    }
+
+    [data-reveal-stagger] > [data-reveal]:nth-child(3) {
+      transition-delay: 160ms;
+    }
+
+    [data-reveal-stagger] > [data-reveal]:nth-child(4) {
+      transition-delay: 240ms;
+    }
+
+    /* The product frame starts tipped back and lies flat as the page scrolls (scripts/scenes/stage
+     * sets `--stage-tilt` from 1 to 0). */
+    [data-stage] {
+      transform: perspective(2400px) rotateX(calc(var(--stage-tilt) * 14deg))
+        scale(calc(1 - var(--stage-tilt) * 0.06));
+      transform-origin: 50% 0;
+    }
+
+    /* Words light up as the reader reaches them (scripts/scenes/illuminate). */
+    [data-illuminate] [data-word] {
+      color: var(--color-ink-faint);
+      transition: color 450ms var(--ease-standard);
+    }
+
+    [data-illuminate] [data-word][data-lit] {
+      color: var(--color-ink);
+    }
+
+    /* A timeline fills as it is read; each step's marker fills when the line reaches it
+     * (scripts/scenes/timeline). */
+    [data-timeline-fill] {
+      scale: 0 1;
+    }
+
+    [data-timeline] > li:not([data-reached]) [data-timeline-marker] {
+      background-color: var(--color-paper-muted);
+    }
+
+    /* Loops run only while their scene is on screen (scripts/scenes/live). */
+    [data-live]:not([data-in-view]) [data-loop] {
+      animation-play-state: paused;
+    }
+  }
+}

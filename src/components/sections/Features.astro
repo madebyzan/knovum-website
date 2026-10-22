@@ -1,0 +1,44 @@
+---
+import { SECTION_IDS } from "@/config/navigation";
+import { getI18n } from "@/i18n";
+import { formatOrdinal } from "@/lib/format";
+
+import CitationSpecimen from "../specimens/CitationSpecimen.astro";
+import PrivacySpecimen from "../specimens/PrivacySpecimen.astro";
+import StructureSpecimen from "../specimens/StructureSpecimen.astro";
+import TrailSpecimen from "../specimens/TrailSpecimen.astro";
+import Section from "../ui/Section.astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+
+const { t } = getI18n(Astro);
+const id = SECTION_IDS.features;
+const [structure, citation, trail, privacy] = t.features.items;
+
+// Each feature beside a specimen of the interface it describes.
+const features = [
+  { passage: structure, Specimen: StructureSpecimen },
+  { passage: citation, Specimen: CitationSpecimen },
+  { passage: trail, Specimen: TrailSpecimen },
+  { passage: privacy, Specimen: PrivacySpecimen },
+];
+---
+
+<Section id={id} labelledBy={`${id}-title`}>
+  <SectionHeading id={`${id}-title`} kicker={t.nav.sections.features} title={t.features.title} />
+
+  <ol class="mt-16 grid gap-y-20 md:mt-24 lg:gap-y-32">
+    {features.map(({ passage, Specimen }, index) => (
+      <li class="grid items-center gap-x-split gap-y-10 lg:grid-cols-2" data-reveal>
+        {/* Passages alternate sides on wide screens, so the eye zigzags down the section. */}
+        <div class:list={["max-w-passage", index % 2 === 1 && "lg:order-last"]}>
+          <span class="block font-mono text-caption text-ink-subtle" aria-hidden="true">
+            {formatOrdinal(index)}
+          </span>
+          <h3 class="mt-5 mb-4 font-heading text-heading">{passage.title}</h3>
+          <p class="text-ink-muted">{passage.body}</p>
+        </div>
+        <Specimen />
+      </li>
+    ))}
+  </ol>
+</Section>

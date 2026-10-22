@@ -1,0 +1,22 @@
+---
+import type { BrandLogo as Logo } from "@/lib/brand-logo";
+
+interface Props {
+  logo: Logo;
+  /** Its size where it is placed; it is always drawn in the current text colour. */
+  class?: string;
+}
+
+const { logo, class: className } = Astro.props;
+---
+
+{/* Decorative: the brand's name is always set beside its mark. */}
+<svg
+  viewBox={logo.viewBox}
+  fill="currentColor"
+  fill-rule={logo.fillRule}
+  class={className}
+  aria-hidden="true"
+>
+  <Fragment set:html={logo.body} />
+</svg>

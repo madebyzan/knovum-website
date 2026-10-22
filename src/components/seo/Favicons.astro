@@ -1,0 +1,16 @@
+---
+import { getImage } from "astro:assets";
+
+import appIcon from "@/assets/app-icon.png";
+
+// Derived from the one source icon, so the tab, the home screen and the manifest never disagree.
+const [tab, touch] = await Promise.all([
+  getImage({ src: appIcon, width: 32, height: 32, format: "png" }),
+  getImage({ src: appIcon, width: 180, height: 180, format: "png" }),
+]);
+---
+
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" href={tab.src} type="image/png" sizes="32x32" />
+<link rel="apple-touch-icon" href={touch.src} />
+<link rel="manifest" href="/site.webmanifest" />

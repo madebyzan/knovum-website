@@ -1,0 +1,54 @@
+---
+import { Icon } from "astro-icon/components";
+
+import { providers } from "@/data/providers";
+import { getI18n } from "@/i18n";
+import { tv } from "@/lib/tv";
+
+import BrandLogo from "../ui/BrandLogo.astro";
+import Section from "../ui/Section.astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+
+const { t } = getI18n(Astro);
+const id = "providers-title";
+
+/** A provider as a chip with its mark. Chips wrap, so the list holds however many providers there are. */
+const chip = tv({
+  base: "inline-flex h-11 items-center gap-2.5 rounded-full px-4 text-body-sm whitespace-nowrap",
+  variants: {
+    kind: {
+      provider:
+        "border border-line bg-surface text-ink shadow-panel transition-[translate,box-shadow] duration-200 ease-standard hover:-translate-y-0.5",
+      /** Not a provider but a promise: anything that speaks the same API. Outlined, not filled. */
+      open: "border border-dashed border-line-strong text-ink-muted",
+    },
+  },
+});
+---
+
+<Section labelledBy={id} containerClass="grid gap-y-12 lg:grid-cols-aside lg:gap-x-split">
+  <SectionHeading
+    id={id}
+    title={t.providers.title}
+    lead={t.providers.body}
+    class="lg:sticky lg:top-sticky lg:self-start"
+  />
+
+  <div>
+    <ul class="flex flex-wrap gap-2.5" data-reveal-stagger>
+      {providers.map(({ name, logo }) => (
+        <li class={chip({ kind: "provider" })} data-reveal>
+          <BrandLogo logo={logo} class="size-4.5 shrink-0" />
+          {name}
+        </li>
+      ))}
+      <li class={chip({ kind: "open" })} data-reveal>
+        <Icon name="lucide:plus" class="size-4 shrink-0" aria-hidden="true" />
+        {t.providers.anyCompatible}
+      </li>
+    </ul>
+    <p class="mt-12 border-t border-line pt-6 text-label text-ink-subtle" data-reveal>
+      {t.providers.footnote}
+    </p>
+  </div>
+</Section>

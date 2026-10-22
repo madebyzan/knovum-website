@@ -1,0 +1,41 @@
+---
+import type { Passage } from "@/i18n";
+import { formatOrdinal } from "@/lib/format";
+
+interface Props {
+  steps: readonly Passage[];
+}
+
+const { steps } = Astro.props;
+---
+
+{/*
+  A sequence of short steps along one rule. On wide screens they read across a single line that the
+  timeline scene fills as the row is read, marking each step as the fill reaches it; stacked, each
+  step keeps a rule of its own.
+*/}
+<div class="relative mt-12 md:mt-20" data-timeline-scene>
+  <div class="absolute inset-x-0 top-0 hidden h-px bg-line-strong lg:block" aria-hidden="true"></div>
+  <div
+    class="absolute inset-x-0 top-0 hidden h-px origin-left bg-ink lg:block"
+    aria-hidden="true"
+    data-timeline-fill
+  ></div>
+
+  <ol class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4" data-timeline data-reveal-stagger>
+    {steps.map((step, index) => (
+      <li class="relative border-t border-line-strong pt-6 lg:border-t-0 lg:pt-8" data-reveal>
+        <span
+          class="absolute -top-1 left-0 hidden size-2 rounded-full border border-ink bg-ink transition-colors duration-300 lg:block"
+          aria-hidden="true"
+          data-timeline-marker
+        />
+        <span class="mb-4 block font-mono text-caption text-ink-subtle" aria-hidden="true">
+          {formatOrdinal(index)}
+        </span>
+        <h3 class="mb-2.5 text-subheading">{step.title}</h3>
+        <p class="text-body-sm text-ink-muted">{step.body}</p>
+      </li>
+    ))}
+  </ol>
+</div>

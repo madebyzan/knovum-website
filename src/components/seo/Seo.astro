@@ -1,0 +1,54 @@
+---
+import { getImage } from "astro:assets";
+
+import appIcon from "@/assets/app-icon.png";
+import { localeMeta } from "@/config/locales";
+import { site } from "@/config/site";
+import { themeColors } from "@/config/theme-colors";
+import { getI18n, localizedHomes } from "@/i18n";
+import { siteOrigin } from "@/lib/origin";
+
+interface Props {
+  title: string;
+  description: string;
+  /** Whether this page has a counterpart in every language. */
+  alternates: boolean;
+  noindex: boolean;
+}
+
+const { title, description, alternates, noindex } = Astro.props;
+const { locale, tag } = getI18n(Astro);
+
+// Canonical, hreflang and Open Graph URLs must be absolute.
+const origin = siteOrigin(Astro.site);
+const canonical = new URL(Astro.url.pathname, origin);
+const shareImage = await getImage({ src: appIcon, width: 256, height: 256, format: "png" });
+const shareImageUrl = new URL(shareImage.src, origin);
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+{noindex && <meta name="robots" content="noindex" />}
+<link rel="canonical" href={canonical.href} />
+{alternates &&
+  localizedHomes().map(({ locale: alternate, path }) => (
+    <link rel="alternate" hreflang={localeMeta[alternate].tag} href={new URL(path, origin).href} />
+  ))}
+{alternates && <link rel="alternate" hreflang="x-default" href={origin.href} />}
+
+<meta name="theme-color" content={themeColors.light} media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content={themeColors.dark} media="(prefers-color-scheme: dark)" />
+<meta name="color-scheme" content="light dark" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:locale" content={localeMeta[locale].ogLocale} />
+{alternates &&
+  Object.values(localeMeta)
+    .filter((meta) => meta.tag !== tag)
+    .map((meta) => <meta property="og:locale:alternate" content={meta.ogLocale} />)}
+<meta property="og:url" content={canonical.href} />
+<meta property="og:image" content={shareImageUrl.href} />
+<meta name="twitter:card" content="summary" />

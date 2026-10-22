@@ -1,0 +1,14 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import { tv } from "@/lib/tv";
+
+type Props = HTMLAttributes<"div">;
+
+const container = tv({ base: "mx-auto w-full max-w-page px-gutter" });
+const { class: className, ...attributes } = Astro.props;
+---
+
+<div class={container({ class: className })} {...attributes}>
+  <slot />
+</div>

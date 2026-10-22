@@ -1,0 +1,66 @@
+---
+import { Icon } from "astro-icon/components";
+
+import { PRIMARY_SECTIONS } from "@/config/navigation";
+import { externalLinks } from "@/config/site";
+import { getI18n, sectionPath } from "@/i18n";
+
+import { action, navLink } from "../ui/variants";
+import LocaleSwitch from "./LocaleSwitch.astro";
+
+const { locale, t } = getI18n(Astro);
+const MENU_ID = "site-menu";
+---
+
+<button
+  type="button"
+  class={action({ variant: "quiet", size: "icon", class: "-mr-2 md:hidden" })}
+  popovertarget={MENU_ID}
+  aria-label={t.a11y.openMenu}
+>
+  <Icon name="lucide:menu" class="size-5" aria-hidden="true" />
+</button>
+
+<div
+  id={MENU_ID}
+  popover
+  data-site-menu
+  class:list={[
+    "inset-x-0 top-header bottom-auto m-0 h-auto w-full max-w-none border-0 border-b border-line bg-paper p-0 text-ink",
+    "backdrop:bg-ink/15 md:hidden",
+    "opacity-0 -translate-y-1 open:translate-y-0 open:opacity-100",
+    "transition-[opacity,translate,display,overlay] transition-discrete duration-200 ease-standard",
+    "starting:open:-translate-y-1 starting:open:opacity-0 motion-reduce:transition-none",
+  ]}
+>
+  <nav aria-label={t.a11y.menu} class="mx-auto flex max-w-page flex-col px-gutter pt-2 pb-6">
+    <ul class="divide-y divide-line">
+      {PRIMARY_SECTIONS.map((section) => (
+        <li>
+          <a class={navLink({ class: "block py-4 text-body" })} href={sectionPath(locale, section)}>
+            {t.nav.sections[section]}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="mt-4 flex items-center gap-6 border-t border-line pt-5">
+      <LocaleSwitch />
+      <a
+        class={navLink({ class: "inline-flex items-center gap-2 text-body-sm" })}
+        href={externalLinks.github}
+      >
+        <Icon name="simple-icons:github" class="size-4" aria-hidden="true" />
+        GitHub
+      </a>
+      <button
+        type="button"
+        class={action({ variant: "quiet", size: "icon", class: "-mr-2 ml-auto" })}
+        popovertarget={MENU_ID}
+        popovertargetaction="hide"
+        aria-label={t.a11y.closeMenu}
+      >
+        <Icon name="lucide:x" class="size-5" aria-hidden="true" />
+      </button>
+    </div>
+  </nav>
+</div>

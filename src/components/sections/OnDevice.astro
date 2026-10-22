@@ -1,0 +1,28 @@
+---
+import { SECTION_IDS } from "@/config/navigation";
+import { capabilities } from "@/data/capabilities";
+import { getI18n } from "@/i18n";
+
+import CapabilityShowcase from "../on-device/CapabilityShowcase.astro";
+import Section from "../ui/Section.astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+
+const { t } = getI18n(Astro);
+const { onDevice } = t;
+const id = SECTION_IDS.onDeviceAi;
+---
+
+<Section id={id} labelledBy={`${id}-title`} tone="inverse">
+  <CapabilityShowcase>
+    <SectionHeading
+      id={`${id}-title`}
+      kicker={onDevice.kicker(capabilities.length)}
+      title={onDevice.title}
+      lead={onDevice.lead}
+    />
+  </CapabilityShowcase>
+
+  <p class="mt-10 text-label text-ink-subtle lg:mt-14" data-reveal>
+    {onDevice.note}
+  </p>
+</Section>

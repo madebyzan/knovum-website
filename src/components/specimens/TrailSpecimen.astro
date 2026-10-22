@@ -1,0 +1,61 @@
+---
+import { Icon } from "astro-icon/components";
+
+import { documentCreatedAt, documentSources } from "@/data/sample";
+import { getI18n } from "@/i18n";
+import { formatDate } from "@/lib/format";
+
+import SpecimenFrame from "./SpecimenFrame.astro";
+import { panel } from "./variants";
+
+const { t, tag } = getI18n(Astro);
+const { canvas } = t;
+const { trail } = t.features;
+
+const row = "grid grid-cols-[6rem_minmax(0,1fr)] gap-x-4 py-3.5 sm:grid-cols-[7rem_minmax(0,1fr)]";
+---
+
+<SpecimenFrame>
+  <div class={panel({ class: "overflow-hidden" })}>
+    <div class="border-b border-line px-6 pt-5 pb-4">
+      <p class="flex items-center gap-1.75 text-caption font-medium text-ink-subtle">
+        <Icon name="lucide:file-text" class="size-3.5" />
+        {canvas.document.kind}
+      </p>
+      <p class="mt-1.5 font-heading text-heading text-ink">{canvas.document.title}</p>
+    </div>
+
+    <dl class="divide-y divide-line px-6 text-body-sm">
+      <div class={row}>
+        <dt class="text-ink-subtle">{trail.inputs}</dt>
+        <dd class="grid gap-1.5">
+          {documentSources.map(({ source, revision }) => (
+            <span class="flex items-baseline justify-between gap-3 text-ink">
+              {canvas[source].kind}
+              <span class="font-mono text-caption text-ink-subtle">{revision}</span>
+            </span>
+          ))}
+        </dd>
+      </div>
+      <div class={row}>
+        <dt class="text-ink-subtle">{trail.steps}</dt>
+        <dd class="grid gap-1.5">
+          {trail.actions.map((step) => (
+            <span class="flex flex-wrap items-baseline justify-between gap-x-3 text-ink">
+              {step.action}
+              <span class="text-caption text-ink-subtle">{step.engine}</span>
+            </span>
+          ))}
+        </dd>
+      </div>
+      <div class={row}>
+        <dt class="text-ink-subtle">{trail.created}</dt>
+        <dd class="text-ink">
+          <time datetime={documentCreatedAt.toISOString()}>{formatDate(documentCreatedAt, tag)}</time>
+        </dd>
+      </div>
+    </dl>
+
+    <p class="border-t border-line bg-paper-muted px-6 py-3.5 text-label text-ink-muted">{trail.note}</p>
+  </div>
+</SpecimenFrame>

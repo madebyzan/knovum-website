@@ -1,0 +1,63 @@
+---
+import { Icon } from "astro-icon/components";
+
+import { externalLinks } from "@/config/site";
+import { getI18n, sectionPath } from "@/i18n";
+import type { Release } from "@/lib/releases";
+
+import ProductCanvas from "../canvas/ProductCanvas.astro";
+import ActionLink from "../ui/ActionLink.astro";
+import Section from "../ui/Section.astro";
+
+interface Props {
+  release: Release;
+}
+
+const { locale, t } = getI18n(Astro);
+const { hero } = t;
+const { release } = Astro.props;
+---
+
+<Section labelledBy="hero-title" class="relative isolate overflow-hidden pt-hero pb-0">
+  {/* The page opens on the surface the product is made of: the canvas's dot grid, fading out. */}
+  <div class="absolute inset-x-0 top-0 -z-10 h-[52rem] dot-field-top" aria-hidden="true"></div>
+
+  <div class="flex flex-col items-center text-center">
+    <a
+      href={release.url}
+      class="group mb-7 inline-flex items-center gap-2.5 rounded-full border border-line bg-paper py-1.5 pr-2 pl-3.5 text-label font-medium text-ink-muted transition-colors duration-200 ease-standard hover:border-line-strong hover:text-ink motion-safe:animate-settle enter-0"
+    >
+      <span class="size-1.5 rounded-full bg-accent" aria-hidden="true"></span>
+      {hero.announcement(release.version)}
+      <span class="h-3.5 border-l border-line" aria-hidden="true"></span>
+      <span class="inline-flex items-center gap-1 text-ink">
+        {hero.releaseNotes}
+        <Icon
+          name="lucide:arrow-right"
+          class="size-3.5 transition-transform duration-200 ease-standard group-hover:translate-x-0.5"
+          aria-hidden="true"
+        />
+      </span>
+    </a>
+
+    <h1 id="hero-title" class="font-heading text-display motion-safe:animate-settle enter-0">
+      <span class="block">{hero.title[0]}</span>
+      <span class="block text-ink-subtle">{hero.title[1]}</span>
+    </h1>
+
+    <p class="mt-7 max-w-measure text-lead text-ink-muted motion-safe:animate-settle enter-1">{hero.lead}</p>
+
+    <div class="mt-9 flex flex-wrap justify-center gap-3 motion-safe:animate-settle enter-1">
+      <ActionLink href={sectionPath(locale, "download")}>{hero.downloadAction}</ActionLink>
+      <ActionLink href={externalLinks.github} variant="secondary" icon="simple-icons:github">
+        {hero.sourceAction}
+      </ActionLink>
+    </div>
+
+    <p class="mt-4 text-label text-ink-subtle motion-safe:animate-fade enter-2">{hero.availability}</p>
+  </div>
+
+  <div class="mt-12 md:mt-14" data-stage>
+    <ProductCanvas />
+  </div>
+</Section>

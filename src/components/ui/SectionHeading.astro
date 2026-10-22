@@ -1,0 +1,46 @@
+---
+import { tv, type VariantProps } from "@/lib/tv";
+
+const heading = tv({
+  slots: {
+    root: "",
+    kicker: "mb-6 text-label font-medium text-ink-subtle",
+    title: "font-heading",
+    lead: "mt-7 max-w-measure text-lead text-ink-muted",
+  },
+  variants: {
+    size: {
+      title: { title: "max-w-title text-title" },
+      /** For the page's closing call, set as large as its opening. */
+      display: { title: "text-display" },
+    },
+    align: {
+      start: {},
+      center: { root: "flex flex-col items-center text-center" },
+    },
+  },
+  defaultVariants: { size: "title", align: "start" },
+});
+
+type Props = VariantProps<typeof heading> & {
+  /** The heading's id, for the section's `aria-labelledby`. */
+  id: string;
+  title: string;
+  kicker?: string | undefined;
+  lead?: string | undefined;
+  class?: string;
+};
+
+const { id, title, kicker, lead, size, align, class: className } = Astro.props;
+const styles = heading({ size, align });
+---
+
+<header class={styles.root({ class: className })} data-reveal>
+  {kicker && <p class={styles.kicker()}>{kicker}</p>}
+  {/* A figure set between the kicker and the title, when a section leads with one. */}
+  <slot name="figure" />
+  <h2 id={id} class={styles.title()}>
+    {title}
+  </h2>
+  {lead && <p class={styles.lead()}>{lead}</p>}
+</header>

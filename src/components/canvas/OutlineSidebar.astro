@@ -1,0 +1,51 @@
+---
+import { Icon } from "astro-icon/components";
+
+import { openContradictions } from "@/data/sample";
+import { getI18n } from "@/i18n";
+import { tv } from "@/lib/tv";
+
+interface Props {
+  class: string;
+}
+
+const { canvas, features } = getI18n(Astro).t;
+
+/** The Space's contents as its Outline lists them, in canvas order; the claim is the selection. */
+const items = [
+  { icon: "sticky-note", label: canvas.note.title, selected: false },
+  { icon: "audio-lines", label: canvas.recording.title, selected: false },
+  { icon: "globe", label: canvas.capture.title, selected: false },
+  { icon: "quote", label: canvas.claim.text, selected: true },
+  { icon: "file-text", label: canvas.document.title, selected: false },
+];
+
+const item = tv({
+  base: "flex items-center gap-2.5 rounded-canvas-md px-2.5 py-2 text-canvas-sm text-ink-muted",
+  variants: { selected: { true: "bg-accent/10 font-medium text-ink" } },
+});
+---
+
+{/* The left sidebar of a Space, on the same quiet plane as the toolbar. */}
+<div class:list={["flex flex-col border-r border-line bg-paper-muted px-3 py-4", Astro.props.class]}>
+  <p class="flex items-center gap-2 px-2.5 text-canvas-xs font-semibold text-ink-subtle">
+    <Icon name="lucide:list-tree" class="size-3.5" />
+    {canvas.outline}
+    <span class="ml-auto font-normal tabular-nums">{items.length}</span>
+  </p>
+
+  <ul class="mt-3 grid gap-0.5">
+    {items.map(({ icon, label, selected }) => (
+      <li class={item({ selected })}>
+        <Icon name={`lucide:${icon}`} class="size-3.5 shrink-0" />
+        <span class="truncate">{label}</span>
+      </li>
+    ))}
+  </ul>
+
+  <p class="mt-auto flex items-center gap-2 rounded-canvas-md bg-surface px-2.5 py-2.5 text-canvas-xs text-ink-muted shadow-canvas-card">
+    <span class="size-1.5 shrink-0 rounded-full bg-ink"></span>
+    <span class="font-semibold text-ink">{features.structure.health}</span>
+    <span class="ml-auto tabular-nums">{openContradictions}</span>
+  </p>
+</div>

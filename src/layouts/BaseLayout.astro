@@ -1,0 +1,57 @@
+---
+import { Font } from "astro:assets";
+
+import "@/styles/global.css";
+
+import SiteFooter from "@/components/layout/SiteFooter.astro";
+import SiteHeader from "@/components/layout/SiteHeader.astro";
+import SkipLink from "@/components/layout/SkipLink.astro";
+import Analytics from "@/components/seo/Analytics.astro";
+import Favicons from "@/components/seo/Favicons.astro";
+import Seo from "@/components/seo/Seo.astro";
+import { getI18n } from "@/i18n";
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Whether this page exists in every language, for hreflang and Open Graph alternates. */
+  alternates?: boolean;
+  noindex?: boolean;
+}
+
+const { locale, t, tag } = getI18n(Astro);
+const {
+  title = t.meta.title,
+  description = t.meta.description,
+  alternates = true,
+  noindex = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang={tag} dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Only English sets headings in the serif, so only English pages ask for it early. -->
+    <Font cssVariable="--font-source-serif" preload={locale === "en"} />
+    <Seo title={title} description={description} alternates={alternates} noindex={noindex} />
+    <Favicons />
+    <slot name="head" />
+    <Analytics />
+  </head>
+  <body class="bg-paper font-sans text-body text-ink antialiased">
+    <SkipLink />
+    <SiteHeader />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <SiteFooter />
+
+    <script>
+      import "@/scripts/reveal";
+      import "@/scripts/scenes";
+      import "@/scripts/site-menu";
+    </script>
+  </body>
+</html>
