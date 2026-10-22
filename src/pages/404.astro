@@ -3,8 +3,8 @@ import ActionLink from "@/components/ui/ActionLink.astro";
 import Section from "@/components/ui/Section.astro";
 import { DEFAULT_LOCALE, LOCALES, localeMeta } from "@/config/locales";
 import { site } from "@/config/site";
-import { getDictionary, homePath } from "@/i18n";
-import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getDictionary, homePath } from "@/i18n/page-language";
+import SiteLayout from "@/layouts/SiteLayout.astro";
 
 // One page serves every unknown address, so it speaks every language rather than guessing one.
 const notices = LOCALES.map((locale) => ({
@@ -15,7 +15,7 @@ const notices = LOCALES.map((locale) => ({
 const title = `${getDictionary(DEFAULT_LOCALE).notFound.title} — ${site.name}`;
 ---
 
-<BaseLayout title={title} alternates={false} noindex>
+<SiteLayout title={title} alternates={false} noindex>
   <Section class="min-h-[60svh]" containerClass="grid gap-16">
     <p class="font-mono text-label text-ink-subtle">404</p>
     {notices.map(({ locale, tag, copy }, index) => (
@@ -32,4 +32,4 @@ const title = `${getDictionary(DEFAULT_LOCALE).notFound.title} — ${site.name}`
       </div>
     ))}
   </Section>
-</BaseLayout>
+</SiteLayout>

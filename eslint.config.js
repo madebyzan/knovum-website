@@ -35,7 +35,10 @@ export default defineConfig(
     files: ["**/*.ts"],
     extends: [tseslint.configs.strictTypeCheckedOnly],
     languageOptions: {
-      parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname },
+      parserOptions: {
+        project: ["./tsconfig.json", "./tsconfig.tests.json"],
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
     rules: {
       "@typescript-eslint/restrict-template-expressions": ["error", { allowNumber: true }],

@@ -1,10 +1,10 @@
 ---
-import { CAPABILITY_GROUPS, capabilitiesIn, type CapabilityGroup } from "@/data/capabilities";
-import { upscale } from "@/data/sample";
-import { getI18n } from "@/i18n";
+import { MODEL_OPERATION_GROUPS, modelOperationsIn, type ModelOperationGroup } from "@/data/model-operations";
+import { upscale } from "@/data/demo-space";
+import { getI18n } from "@/i18n/page-language";
 import { formatOrdinal } from "@/lib/format";
 
-import CapabilityList from "./CapabilityList.astro";
+import ModelCoverage from "./ModelCoverage.astro";
 import DemoWindow from "./DemoWindow.astro";
 import FindDemo from "./FindDemo.astro";
 import ListenDemo from "./ListenDemo.astro";
@@ -15,7 +15,7 @@ const { onDevice } = t;
 
 /** Each group's demo and the title its window bears. A new group must say how it is shown. */
 type Demo = typeof ListenDemo;
-const demos: Readonly<Record<CapabilityGroup, { Demo: Demo; title: string }>> = {
+const demoByGroup: Readonly<Record<ModelOperationGroup, { Demo: Demo; title: string }>> = {
   audio: { Demo: ListenDemo, title: `${t.canvas.recording.title} · ${t.canvas.recording.duration}` },
   image: { Demo: SeeDemo, title: upscale.file },
   search: { Demo: FindDemo, title: t.canvas.space },
@@ -34,7 +34,7 @@ const demos: Readonly<Record<CapabilityGroup, { Demo: Demo; title: string }>> = 
   <slot />
 
   <div role="tablist" aria-label={onDevice.title} class="tablist flex border-b border-line lg:flex-col">
-    {CAPABILITY_GROUPS.map((group, index) => (
+    {MODEL_OPERATION_GROUPS.map((group, index) => (
       <button
         type="button"
         role="tab"
@@ -51,7 +51,7 @@ const demos: Readonly<Record<CapabilityGroup, { Demo: Demo; title: string }>> = 
             {onDevice.groups[group].title}
           </span>
           <span class="ml-auto hidden font-mono text-caption text-ink-subtle tabular-nums lg:inline">
-            {capabilitiesIn(group).length}
+            {modelOperationsIn(group).length}
           </span>
         </span>
         <span class="body hidden lg:grid">
@@ -70,8 +70,8 @@ const demos: Readonly<Record<CapabilityGroup, { Demo: Demo; title: string }>> = 
     ))}
   </div>
 
-  {CAPABILITY_GROUPS.map((group) => {
-    const { Demo, title } = demos[group];
+  {MODEL_OPERATION_GROUPS.map((group) => {
+    const { Demo, title } = demoByGroup[group];
     return (
       <div
         role="tabpanel"
@@ -84,7 +84,7 @@ const demos: Readonly<Record<CapabilityGroup, { Demo: Demo; title: string }>> = 
             <Demo />
           </DemoWindow>
         </div>
-        <CapabilityList group={group} />
+        <ModelCoverage group={group} />
       </div>
     );
   })}

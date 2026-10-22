@@ -1,0 +1,18 @@
+---
+import { getI18n } from "@/i18n/page-language";
+
+import CanvasNode from "./CanvasNode.astro";
+import ObjectClassification from "./ObjectClassification.astro";
+
+interface Props {
+  class: string;
+}
+
+const { note } = getI18n(Astro).t.canvas;
+---
+
+<CanvasNode class={Astro.props.class}>
+  <ObjectClassification icon="sticky-note" label={note.kind} />
+  <p class="mb-1.5 text-canvas-lg leading-snug font-semibold text-ink">{note.title}</p>
+  <p class="text-ink-muted">{note.body}</p>
+</CanvasNode>

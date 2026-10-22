@@ -4,7 +4,7 @@ import { scroll } from "motion";
  * Words light up in reading order as the passage moves up the screen: the first as it enters the
  * lower part of the viewport, the last by the time the passage's end reaches the middle.
  */
-export function illuminate(element: HTMLElement): void {
+export function illuminateStatement(element: HTMLElement): void {
   const words = [...element.querySelectorAll<HTMLElement>("[data-word]")];
   let lit = 0;
 

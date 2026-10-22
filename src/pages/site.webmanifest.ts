@@ -5,7 +5,7 @@ import appIcon from "@/assets/app-icon.png";
 import { DEFAULT_LOCALE } from "@/config/locales";
 import { site } from "@/config/site";
 import { themeColors } from "@/config/theme-colors";
-import { getDictionary } from "@/i18n";
+import { getDictionary } from "@/i18n/page-language";
 
 const SIZES = [192, 256] as const;
 

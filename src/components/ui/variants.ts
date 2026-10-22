@@ -1,4 +1,4 @@
-import { tv, type VariantProps } from "@/lib/tv";
+import { tv, type VariantProps } from "@/lib/style-variants";
 
 /** One definition of the call-to-action, shared by links and buttons so they always match. */
 export const action = tv({

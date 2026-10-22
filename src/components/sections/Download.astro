@@ -1,11 +1,12 @@
 ---
 import { SECTION_IDS } from "@/config/navigation";
 import { externalLinks } from "@/config/site";
-import { getI18n } from "@/i18n";
+import { getI18n } from "@/i18n/page-language";
 import { formatDate } from "@/lib/format";
-import { PLATFORM_NAMES, type Release } from "@/lib/releases";
+import { PLATFORM_NAMES } from "@/lib/releases/installers";
+import { type Release } from "@/lib/releases/github";
 
-import PlatformCard from "../download/PlatformCard.astro";
+import PlatformDownload from "../download/PlatformDownload.astro";
 import Section from "../ui/Section.astro";
 import SectionHeading from "../ui/SectionHeading.astro";
 import { inlineLink } from "../ui/variants";
@@ -35,7 +36,7 @@ const id = SECTION_IDS.download;
 
   <div class="mx-auto mt-14 grid max-w-downloads gap-4 md:mt-16 md:grid-cols-2 md:gap-5" data-reveal>
     {PLATFORM_NAMES.map((platform) => (
-      <PlatformCard platform={platform} installers={release.installers} />
+      <PlatformDownload platform={platform} installers={release.installers} />
     ))}
   </div>
 

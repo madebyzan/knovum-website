@@ -8,11 +8,11 @@ import Statement from "@/components/sections/Statement.astro";
 import Workflow from "@/components/sections/Workflow.astro";
 import JsonLd from "@/components/seo/JsonLd.astro";
 import { DEFAULT_LOCALE, LOCALES } from "@/config/locales";
-import { getI18n } from "@/i18n";
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import { getLatestRelease } from "@/lib/releases";
+import { getI18n } from "@/i18n/page-language";
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import { getLatestRelease } from "@/lib/releases/latest-release";
 import { siteOrigin } from "@/lib/origin";
-import { softwareApplication } from "@/lib/structured-data";
+import { describeSoftware } from "@/lib/software-description";
 
 /** One home page per language: `/` for the default, `/<locale>/` for the others. */
 export function getStaticPaths() {
@@ -21,7 +21,7 @@ export function getStaticPaths() {
 
 const { t, tag } = getI18n(Astro);
 const release = await getLatestRelease();
-const structuredData = softwareApplication({
+const softwareDescription = describeSoftware({
   description: t.meta.description,
   languageTag: tag,
   url: new URL(Astro.url.pathname, siteOrigin(Astro.site)),
@@ -29,8 +29,8 @@ const structuredData = softwareApplication({
 });
 ---
 
-<BaseLayout>
-  <JsonLd slot="head" data={structuredData} />
+<SiteLayout>
+  <JsonLd slot="head" description={softwareDescription} />
   <Hero release={release} />
   <Statement />
   <Features />
@@ -38,4 +38,4 @@ const structuredData = softwareApplication({
   <OnDevice />
   <Providers />
   <Download release={release} />
-</BaseLayout>
+</SiteLayout>

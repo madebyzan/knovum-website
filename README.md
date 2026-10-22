@@ -47,27 +47,27 @@ on the machine, set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH`.
 ```
 src/
   config/         Facts: site and repository, locales, navigation, analytics, theme colours.
-  data/           Language-neutral content: on-device capabilities, AI providers.
+  data/           Language-neutral content: on-device modelOperations, AI providers.
   i18n/           Every visitor-facing string. `dictionary.ts` types them; `en.ts` and `zh.ts`
                   fill them; `index.ts` resolves the page's language from Astro's routing.
   lib/            Logic with no markup: releases (GitHub API, installer selection), formatting,
-                  structured data, the token-aware `tv`.
+                  structured data, the token-aware style variants.
   components/
-    ui/           Primitives: Section, Container, SectionHeading, ActionLink, PassageList, Brand.
+    ui/           Primitives: Section, Container, SectionHeading, ActionLink, Timeline, Brand.
     layout/       Header, mobile menu, footer, language switch, skip link.
     seo/          Head metadata, favicons, JSON-LD, analytics.
     canvas/       The product illustration, one component per card.
     sections/     The home page, one component per section.
-  layouts/        BaseLayout: the document shell.
+  layouts/        SiteLayout: the document shell.
   pages/          `[...locale]/` home pages, 404, robots.txt, manifest, favicon.
-  scripts/        The only client script: the reveal and the menu.
+  scripts/        Scroll scenes, demo playback and navigation behaviour.
   styles/         The design system.
 tests/
-  unit/           Release logic, formatting, and copy rules (Chinese spacing, typographic quotes,
-                  snippet lengths).
-  e2e/            Metadata, outline, links, layout at six widths, CSP violations, axe in light and
-                  dark, keyboard and menu behaviour.
+  fixtures/       Recorded release for deterministic local builds.
+  e2e/            Cross-owner browser scenarios: navigation, downloads, demos and accessibility.
 ```
+
+Unit tests live in each implementation owner’s `__tests__/` directory.
 
 ### Principles
 
@@ -76,7 +76,7 @@ tests/
   Locales, sections and project links are declared once in `src/config` and drive routing, the
   header, the footer, hreflang and the sitemap.
 - **Copy is data, typed.** Dictionaries are checked against one interface. Records keyed by the
-  site's own ids (sections, capabilities, installer kinds) make a missing translation a type
+  site's own ids (sections, model operations, installer kinds) make a missing translation a type
   error. Unit tests hold the copy to its typographic rules.
 - **Components know their language.** `getI18n(Astro)` reads the locale from the URL, so no
   component takes a locale prop.

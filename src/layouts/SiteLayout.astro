@@ -9,7 +9,7 @@ import SkipLink from "@/components/layout/SkipLink.astro";
 import Analytics from "@/components/seo/Analytics.astro";
 import Favicons from "@/components/seo/Favicons.astro";
 import Seo from "@/components/seo/Seo.astro";
-import { getI18n } from "@/i18n";
+import { getI18n } from "@/i18n/page-language";
 
 interface Props {
   title?: string;
@@ -50,7 +50,7 @@ const {
 
     <script>
       import "@/scripts/reveal";
-      import "@/scripts/scenes";
+      import "@/scripts/scenes/scroll-scenes";
       import "@/scripts/site-menu";
     </script>
   </body>

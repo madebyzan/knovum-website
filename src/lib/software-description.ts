@@ -1,9 +1,9 @@
 import type { SoftwareApplication, WithContext } from "schema-dts";
 
 import { externalLinks, site } from "@/config/site";
-import type { Release } from "@/lib/releases";
+import type { Release } from "@/lib/releases/github";
 
-interface SoftwareApplicationInput {
+interface SoftwareDescriptionInput {
   readonly description: string;
   readonly languageTag: string;
   readonly url: URL;
@@ -11,7 +11,7 @@ interface SoftwareApplicationInput {
 }
 
 /** Schema.org description of the app, so search results can present it as software. */
-export function softwareApplication(input: SoftwareApplicationInput): WithContext<SoftwareApplication> {
+export function describeSoftware(input: SoftwareDescriptionInput): WithContext<SoftwareApplication> {
   const { description, languageTag, url, release } = input;
   return {
     "@context": "https://schema.org",

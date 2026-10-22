@@ -1,9 +1,9 @@
 ---
 import { SECTION_IDS } from "@/config/navigation";
-import { capabilities } from "@/data/capabilities";
-import { getI18n } from "@/i18n";
+import { modelOperations } from "@/data/model-operations";
+import { getI18n } from "@/i18n/page-language";
 
-import CapabilityShowcase from "../on-device/CapabilityShowcase.astro";
+import OnDeviceShowcase from "../on-device/OnDeviceShowcase.astro";
 import Section from "../ui/Section.astro";
 import SectionHeading from "../ui/SectionHeading.astro";
 
@@ -13,14 +13,14 @@ const id = SECTION_IDS.onDeviceAi;
 ---
 
 <Section id={id} labelledBy={`${id}-title`} tone="inverse">
-  <CapabilityShowcase>
+  <OnDeviceShowcase>
     <SectionHeading
       id={`${id}-title`}
-      kicker={onDevice.kicker(capabilities.length)}
+      kicker={onDevice.kicker(modelOperations.length)}
       title={onDevice.title}
       lead={onDevice.lead}
     />
-  </CapabilityShowcase>
+  </OnDeviceShowcase>
 
   <p class="mt-10 text-label text-ink-subtle lg:mt-14" data-reveal>
     {onDevice.note}

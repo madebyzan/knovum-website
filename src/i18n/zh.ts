@@ -171,7 +171,7 @@ const zh: Dictionary = {
       image: { title: "看", body: "抠图、放大、修复、拆分图层，都在画布上直接完成。" },
       search: { title: "找", body: "按意思搜索整个资料库，内容不必离开你的电脑。" },
     },
-    capabilities: {
+    modelOperations: {
       transcription: "语音转写",
       diarization: "说话人分离",
       separation: "人声与伴奏分离",

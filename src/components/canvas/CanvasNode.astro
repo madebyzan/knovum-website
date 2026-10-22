@@ -1,9 +1,9 @@
 ---
-import { tv, type VariantProps } from "@/lib/tv";
+import { tv, type VariantProps } from "@/lib/style-variants";
 
-const card = tv({
+const nodeAppearance = tv({
   slots: {
-    root: "absolute overflow-hidden rounded-canvas-lg bg-surface px-4.5 py-4 shadow-canvas-card motion-safe:animate-settle",
+    root: "shadow-canvas-nodeAppearance absolute overflow-hidden rounded-canvas-lg bg-surface px-4.5 py-4 motion-safe:animate-settle",
     handle:
       "absolute size-2 rounded-canvas-xs border-[length:calc(var(--spacing)*0.375)] border-accent bg-surface",
   },
@@ -12,13 +12,13 @@ const card = tv({
   },
 });
 
-type Props = VariantProps<typeof card> & {
-  /** Position and size on the 1200-unit stage, and the card's `enter-*` step in the canvas's entrance. */
+type Props = VariantProps<typeof nodeAppearance> & {
+  /** Position and size on the 1440-unit stage, and the nodeAppearance's `enter-*` step in the canvas's entrance. */
   class: string;
 };
 
 const { selected = false, class: geometry } = Astro.props;
-const styles = card({ selected });
+const styles = nodeAppearance({ selected });
 const corners = [
   "-top-1.25 -left-1.25",
   "-top-1.25 -right-1.25",

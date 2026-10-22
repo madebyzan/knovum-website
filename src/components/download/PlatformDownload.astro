@@ -1,9 +1,10 @@
 ---
 import { Icon } from "astro-icon/components";
 
-import { getI18n } from "@/i18n";
+import { getI18n } from "@/i18n/page-language";
 import { formatFileSize } from "@/lib/format";
-import { PLATFORMS, type Platform, type Release } from "@/lib/releases";
+import { PLATFORMS, type Platform } from "@/lib/releases/installers";
+import { type Release } from "@/lib/releases/github";
 
 import { action } from "../ui/variants";
 

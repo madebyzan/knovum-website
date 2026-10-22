@@ -182,7 +182,7 @@ const en: Dictionary = {
         body: "Search by meaning across everything in your library, without sending it anywhere.",
       },
     },
-    capabilities: {
+    modelOperations: {
       transcription: "Speech transcription",
       diarization: "Speaker diarization",
       separation: "Vocal and accompaniment separation",

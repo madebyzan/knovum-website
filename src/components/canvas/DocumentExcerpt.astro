@@ -1,9 +1,9 @@
 ---
-import { documentSources } from "@/data/sample";
-import { getI18n } from "@/i18n";
+import { documentSources } from "@/data/demo-space";
+import { getI18n } from "@/i18n/page-language";
 
-import CanvasCard from "./CanvasCard.astro";
-import CardKind from "./CardKind.astro";
+import CanvasNode from "./CanvasNode.astro";
+import ObjectClassification from "./ObjectClassification.astro";
 
 interface Props {
   class: string;
@@ -15,8 +15,8 @@ const { canvas } = getI18n(Astro).t;
 const { document } = canvas;
 ---
 
-<CanvasCard class={Astro.props.class}>
-  <CardKind icon="file-text" label={document.kind} />
+<CanvasNode class={Astro.props.class}>
+  <ObjectClassification icon="file-text" label={document.kind} />
   <p class="mt-1 mb-3.5 font-heading text-canvas-xl font-medium text-ink">{document.title}</p>
   <p class="text-ink-muted">
     {document.paragraphs[0]}
@@ -52,4 +52,4 @@ const { document } = canvas;
     </ol>
     <p class="mt-2 border-t border-line pt-2 text-canvas-xs text-ink-subtle">{document.trailDetail}</p>
   </div>
-</CanvasCard>
+</CanvasNode>

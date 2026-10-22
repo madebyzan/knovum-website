@@ -1,7 +1,7 @@
 ---
-import { getI18n } from "@/i18n";
+import { getI18n } from "@/i18n/page-language";
 
-import CanvasCard from "./CanvasCard.astro";
+import CanvasNode from "./CanvasNode.astro";
 
 interface Props {
   class: string;
@@ -10,7 +10,7 @@ interface Props {
 const { claim } = getI18n(Astro).t.canvas;
 ---
 
-<CanvasCard class={Astro.props.class} selected>
+<CanvasNode class={Astro.props.class} selected>
   <p class="mb-2.5 inline-block rounded-canvas-sm bg-ink/6 px-2 py-0.5 text-canvas-xs font-semibold tracking-wide text-ink-muted">
     {claim.kind}
   </p>
@@ -19,4 +19,4 @@ const { claim } = getI18n(Astro).t.canvas;
     <span class="size-1.5 rounded-full bg-positive"></span>
     {claim.support}
   </p>
-</CanvasCard>
+</CanvasNode>

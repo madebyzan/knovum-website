@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [".astro/types.d.ts", "src/**/__tests__/**/*.ts", "tests/**/*.ts"],
+  "exclude": ["dist", ".tools", "playwright-report", "test-results"]
+}

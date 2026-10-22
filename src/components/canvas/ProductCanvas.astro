@@ -1,15 +1,15 @@
 ---
 import { Icon } from "astro-icon/components";
 
-import { getI18n } from "@/i18n";
-import { tv } from "@/lib/tv";
+import { getI18n } from "@/i18n/page-language";
+import { tv } from "@/lib/style-variants";
 
-import CaptureCard from "./CaptureCard.astro";
-import ClaimCard from "./ClaimCard.astro";
-import DocumentCard from "./DocumentCard.astro";
-import NoteCard from "./NoteCard.astro";
+import WebCaptureExcerpt from "./WebCaptureExcerpt.astro";
+import ClaimAssessment from "./ClaimAssessment.astro";
+import DocumentExcerpt from "./DocumentExcerpt.astro";
+import NoteExcerpt from "./NoteExcerpt.astro";
 import OutlineSidebar from "./OutlineSidebar.astro";
-import RecordingCard from "./RecordingCard.astro";
+import RecordingPlayback from "./RecordingPlayback.astro";
 
 const { t } = getI18n(Astro);
 
@@ -104,11 +104,11 @@ const relation = tv({
         </span>
       ))}
 
-      <NoteCard class="top-16 left-14 h-44 w-67.5 enter-2" />
-      <RecordingCard class="top-82.5 left-14 h-49 w-67.5 enter-3" />
-      <CaptureCard class="top-10 left-100 h-60 w-78 enter-4" />
-      <ClaimCard class="top-89 left-107 h-37.5 w-63.5 enter-6" />
-      <DocumentCard class="top-14 left-196.5 h-137 w-90.5 px-6.5 py-5.5 enter-8" trailEnter="enter-10" />
+      <NoteExcerpt class="top-16 left-14 h-44 w-67.5 enter-2" />
+      <RecordingPlayback class="top-82.5 left-14 h-49 w-67.5 enter-3" />
+      <WebCaptureExcerpt class="top-10 left-100 h-60 w-78 enter-4" />
+      <ClaimAssessment class="top-89 left-107 h-37.5 w-63.5 enter-6" />
+      <DocumentExcerpt class="top-14 left-196.5 h-137 w-90.5 px-6.5 py-5.5 enter-8" trailEnter="enter-10" />
     </div>
   </div>
 </div>

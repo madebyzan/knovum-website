@@ -1,0 +1,21 @@
+---
+import { citedMoment } from "@/data/demo-space";
+import { getI18n } from "@/i18n/page-language";
+
+import CanvasNode from "./CanvasNode.astro";
+import ObjectClassification from "./ObjectClassification.astro";
+import Waveform from "./Waveform.astro";
+
+interface Props {
+  class: string;
+}
+
+const { recording } = getI18n(Astro).t.canvas;
+---
+
+<CanvasNode class={Astro.props.class}>
+  <ObjectClassification icon="audio-lines" label={recording.kind} aside={recording.duration} />
+  <Waveform highlight={citedMoment.waveform} class="mb-3 h-9.5" />
+  <p class="text-ink">{recording.quote}</p>
+  <p class="mt-2 font-mono text-canvas-xs text-ink-subtle">{citedMoment.at}</p>
+</CanvasNode>

@@ -1,13 +1,13 @@
 ---
 import { Icon } from "astro-icon/components";
 
-import { searchScores } from "@/data/sample";
-import { getI18n } from "@/i18n";
-import { tv } from "@/lib/tv";
+import { searchScores } from "@/data/demo-space";
+import { getI18n } from "@/i18n/page-language";
+import { tv } from "@/lib/style-variants";
 
 /*
  * Find: a search by meaning across the sample Space. The question shares almost no words with the
- * passage it finds; the first result shows the passage it matched. Scores are the sample's facts,
+ * passage it finds; the first match shows the passage it matched. Scores are the sample's facts,
  * drawn as bars so the ranking reads at a glance.
  */
 const { canvas, onDevice } = getI18n(Astro).t;
@@ -21,10 +21,10 @@ const results = [
   },
   { icon: "globe", kind: canvas.capture.kind, title: canvas.capture.title },
   { icon: "file-text", kind: canvas.document.kind, title: canvas.document.title },
-].map((result, index) => ({ ...result, score: searchScores[index] ?? 0 }));
+].map((match, index) => ({ ...match, score: searchScores[index] ?? 0 }));
 
 const row = tv({
-  base: "result rounded-md px-3.5 py-3",
+  base: "match rounded-md px-3.5 py-3",
   variants: { best: { true: "bg-ink/6" } },
 });
 ---
@@ -42,27 +42,27 @@ const row = tv({
   </p>
 
   <ol class="mt-4 grid gap-1.5">
-    {results.map((result, index) => (
+    {results.map((match, index) => (
       <li class={row({ best: index === 0 })}>
         <div class="flex items-center gap-3">
           <span class="grid size-8 shrink-0 place-items-center rounded-sm bg-ink/8 text-ink-muted">
-            <Icon name={`lucide:${result.icon}`} class="size-4" aria-hidden="true" />
+            <Icon name={`lucide:${match.icon}`} class="size-4" aria-hidden="true" />
           </span>
           <span class="min-w-0">
-            <span class="block text-body-sm font-medium text-ink">{result.title}</span>
-            <span class="block text-caption text-ink-subtle">{result.kind}</span>
+            <span class="block text-body-sm font-medium text-ink">{match.title}</span>
+            <span class="block text-caption text-ink-subtle">{match.kind}</span>
           </span>
           <span class="ml-auto flex shrink-0 items-center gap-2.5">
             <svg viewBox="0 0 100 4" class="hidden h-1 w-14 sm:block" aria-hidden="true">
               <rect width="100" height="4" rx="2" class="fill-ink/10"></rect>
-              <rect width={result.score * 100} height="4" rx="2" class="fill-accent"></rect>
+              <rect width={match.score * 100} height="4" rx="2" class="fill-accent"></rect>
             </svg>
-            <span class="font-mono text-caption text-ink-muted tabular-nums">{result.score.toFixed(2)}</span>
+            <span class="font-mono text-caption text-ink-muted tabular-nums">{match.score.toFixed(2)}</span>
           </span>
         </div>
-        {result.passage && (
+        {match.passage && (
           <p class="mt-2.5 ml-11 border-l-2 border-accent pl-3 text-body-sm text-ink-muted">
-            {result.passage}
+            {match.passage}
           </p>
         )}
       </li>
@@ -85,21 +85,21 @@ const row = tv({
     animation: caret 1s steps(1) infinite;
   }
 
-  .result {
+  .match {
     transition:
       opacity 500ms var(--ease-standard),
       translate 500ms var(--ease-standard);
   }
 
-  .result:nth-child(2) {
+  .match:nth-child(2) {
     transition-delay: 90ms;
   }
 
-  .result:nth-child(3) {
+  .match:nth-child(3) {
     transition-delay: 180ms;
   }
 
-  [data-find][data-typing] .result {
+  [data-find][data-typing] .match {
     opacity: 0;
     translate: 0 0.5rem;
     transition-duration: 0ms;

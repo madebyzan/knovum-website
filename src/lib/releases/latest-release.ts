@@ -6,9 +6,6 @@ import { site } from "@/config/site";
 
 import { fetchLatestRelease, parseRelease, type Release } from "./github";
 
-export type { Release } from "./github";
-export { PLATFORM_NAMES, PLATFORMS, type Platform } from "./installers";
-
 let latest: Promise<Release> | undefined;
 
 /**

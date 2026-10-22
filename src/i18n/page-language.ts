@@ -7,9 +7,7 @@ import type { Dictionary } from "./dictionary";
 import en from "./en";
 import zh from "./zh";
 
-export type { Dictionary, Passage } from "./dictionary";
-
-const dictionaries: Readonly<Record<Locale, Dictionary>> = { en, zh };
+const dictionaryByLocale: Readonly<Record<Locale, Dictionary>> = { en, zh };
 
 export interface I18n {
   readonly locale: Locale;
@@ -24,11 +22,11 @@ export interface I18n {
  */
 export function getI18n(astro: { readonly currentLocale: string | undefined }): I18n {
   const locale = isLocale(astro.currentLocale) ? astro.currentLocale : DEFAULT_LOCALE;
-  return { locale, t: dictionaries[locale], tag: localeMeta[locale].tag };
+  return { locale, t: dictionaryByLocale[locale], tag: localeMeta[locale].tag };
 }
 
 export function getDictionary(locale: Locale): Dictionary {
-  return dictionaries[locale];
+  return dictionaryByLocale[locale];
 }
 
 /** The home page of a language, as a root-relative URL. */

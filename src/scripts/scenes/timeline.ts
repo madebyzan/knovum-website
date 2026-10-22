@@ -5,7 +5,7 @@ import { scroll } from "motion";
  * reached once the fill passes where it starts. Positions are read live, so the scene holds at any
  * width; where the steps stack, the rule is hidden and every step is reached as soon as it shows.
  */
-export function timeline(root: HTMLElement): void {
+export function animateWorkflowProgress(root: HTMLElement): void {
   const fill = root.querySelector<HTMLElement>("[data-timeline-fill]");
   const steps = [...root.querySelectorAll<HTMLElement>("[data-timeline] > li")];
   if (!fill) return;

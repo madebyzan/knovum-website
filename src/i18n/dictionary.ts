@@ -1,5 +1,5 @@
 import type { ProjectLinkKey, SectionKey } from "@/config/navigation";
-import type { CapabilityGroup, CapabilityId } from "@/data/capabilities";
+import type { ModelOperationGroup, ModelOperationId } from "@/data/model-operations";
 import type { InstallerKind, Platform } from "@/lib/releases/installers";
 
 /** A heading and the paragraph under it. */
@@ -132,14 +132,14 @@ export interface Dictionary {
 
   readonly workflow: { readonly title: string; readonly steps: Four<Passage> };
 
-  /** Counts are never written into copy: they are counted from `data/capabilities` and passed in. */
+  /** Counts are never written into copy: they are counted from `data/model-operations` and passed in. */
   readonly onDevice: {
-    /** The kicker, with how many capabilities run on-device. */
+    /** The kicker, with how many modelOperations run on-device. */
     readonly kicker: (count: number) => string;
     readonly title: string;
     readonly lead: string;
-    readonly groups: Readonly<Record<CapabilityGroup, Passage>>;
-    readonly capabilities: Readonly<Record<CapabilityId, string>>;
+    readonly groups: Readonly<Record<ModelOperationGroup, Passage>>;
+    readonly modelOperations: Readonly<Record<ModelOperationId, string>>;
     readonly listen: {
       readonly speaker: (number: number) => string;
       /** The three lines of the sample recording's transcript, timed in `data/sample`. */

@@ -1,5 +1,5 @@
 /** Shared pieces of the feature specimens, so every specimen draws a panel, a tag and a mark alike. */
-import { tv } from "@/lib/tv";
+import { tv } from "@/lib/style-variants";
 
 /** A piece of interface resting on the frame. */
 export const panel = tv({

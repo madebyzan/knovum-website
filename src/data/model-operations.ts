@@ -1,23 +1,23 @@
 /**
- * The on-device capabilities, as facts. Model names are the same in every language; a
+ * The on-device modelOperations, as facts. Model names are the same in every language; a
  * capability's name and its group's description are copy and live in each dictionary under the same
  * id. Adding a capability is one line here and its name in each dictionary; everything that lists
- * capabilities, and every count of them, follows.
+ * modelOperations, and every count of them, follows.
  */
 
 /** What a capability works on. Each group is shown with a live demo of its own. */
-export const CAPABILITY_GROUPS = ["audio", "image", "search"] as const;
+export const MODEL_OPERATION_GROUPS = ["audio", "image", "search"] as const;
 
-export type CapabilityGroup = (typeof CAPABILITY_GROUPS)[number];
+export type ModelOperationGroup = (typeof MODEL_OPERATION_GROUPS)[number];
 
-interface Capability {
+interface ModelOperationDefinition {
   readonly id: string;
-  readonly group: CapabilityGroup;
+  readonly group: ModelOperationGroup;
   /** `null` when the capability is composed from the others rather than backed by one model. */
   readonly model: string | null;
 }
 
-export const capabilities = [
+export const modelOperations = [
   { id: "transcription", group: "audio", model: "Whisper + Silero VAD" },
   { id: "diarization", group: "audio", model: "Pyannote 3.0 + ERes2Net" },
   { id: "separation", group: "audio", model: "Spleeter" },
@@ -30,13 +30,13 @@ export const capabilities = [
   { id: "depth", group: "image", model: "Depth Anything V2" },
   { id: "layerSplitting", group: "image", model: null },
   { id: "embeddings", group: "search", model: "Qwen3-Embedding-0.6B" },
-] as const satisfies readonly Capability[];
+] as const satisfies readonly ModelOperationDefinition[];
 
-export type CapabilityId = (typeof capabilities)[number]["id"];
+export type ModelOperationId = (typeof modelOperations)[number]["id"];
 
-export type CapabilityOf = (typeof capabilities)[number];
+export type ModelOperation = (typeof modelOperations)[number];
 
-/** The capabilities in a group, in the order they are listed above. */
-export function capabilitiesIn(group: CapabilityGroup): readonly CapabilityOf[] {
-  return capabilities.filter((capability) => capability.group === group);
+/** The modelOperations in a group, in the order they are listed above. */
+export function modelOperationsIn(group: ModelOperationGroup): readonly ModelOperation[] {
+  return modelOperations.filter((capability) => capability.group === group);
 }

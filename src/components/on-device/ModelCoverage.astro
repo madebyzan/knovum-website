@@ -1,0 +1,21 @@
+---
+import { modelOperationsIn, type ModelOperationGroup } from "@/data/model-operations";
+import { getI18n } from "@/i18n/page-language";
+
+interface Props {
+  group: ModelOperationGroup;
+}
+
+const { t } = getI18n(Astro);
+const { group } = Astro.props;
+---
+
+{/* The modelOperations a demo stands for, each with the model that runs it. */}
+<ul class="mt-6 grid gap-x-10 sm:grid-cols-2">
+  {modelOperationsIn(group).map(({ id, model }) => (
+    <li class="flex items-baseline justify-between gap-4 border-t border-line py-3">
+      <span class="text-body-sm text-ink">{t.onDevice.modelOperations[id]}</span>
+      <span class="text-end text-caption text-ink-subtle">{model ?? t.onDevice.composedModel}</span>
+    </li>
+  ))}
+</ul>

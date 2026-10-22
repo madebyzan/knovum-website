@@ -1,4 +1,4 @@
-import { CAPABILITY_GROUPS, capabilities } from "@/data/capabilities";
+import { MODEL_OPERATION_GROUPS, modelOperations } from "@/data/model-operations";
 
 import { expect, PAGES, test } from "./fixtures";
 
@@ -23,8 +23,8 @@ for (const { path, lang, title } of PAGES) {
       ))
         expect(href).toMatch(/^https?:\/\//);
 
-      const structuredData = await page.locator('script[type="application/ld+json"]').textContent();
-      expect(JSON.parse(structuredData ?? "{}")).toMatchObject({
+      const softwareDescription = await page.locator('script[type="application/ld+json"]').textContent();
+      expect(JSON.parse(softwareDescription ?? "{}")).toMatchObject({
         "@type": "SoftwareApplication",
         name: "Knovum",
       });
@@ -131,12 +131,12 @@ test.describe("downloads", () => {
   });
 });
 
-test.describe("on-device capabilities", () => {
+test.describe("on-device model operations", () => {
   test("switch groups by click and keyboard, and list every capability once", async ({ page }) => {
     await page.goto("/");
     const section = page.locator("#on-device-ai");
     const tabs = section.getByRole("tab");
-    await expect(tabs).toHaveCount(CAPABILITY_GROUPS.length);
+    await expect(tabs).toHaveCount(MODEL_OPERATION_GROUPS.length);
 
     await tabs.nth(1).click();
     await expect(tabs.nth(1)).toHaveAttribute("aria-selected", "true");
@@ -149,7 +149,7 @@ test.describe("on-device capabilities", () => {
     await expect(section.getByRole("tabpanel")).toContainText("Semantic search embeddings");
 
     const listed = await section.locator("[role=tabpanel] li:has(> span + span)").allTextContents();
-    expect(listed).toHaveLength(capabilities.length);
+    expect(listed).toHaveLength(modelOperations.length);
   });
 
   test("let the reader move the comparison with the keyboard", async ({ page }) => {
