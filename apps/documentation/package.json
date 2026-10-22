@@ -1,0 +1,37 @@
+{
+  "name": "@knovum/documentation",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --port 4331",
+    "build": "astro build",
+    "preview": "astro preview --port 4332",
+    "typecheck": "astro check",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "check": "pnpm typecheck && pnpm lint && pnpm test",
+    "test:e2e": "playwright test",
+    "validate:html": "html-validate \"dist/**/*.html\"",
+    "deploy": "pnpm build && wrangler deploy"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "0.42.6",
+    "@knovum/brand": "workspace:*",
+    "@pagefind/default-ui": "1.5.2",
+    "astro": "7.4.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.11",
+    "@axe-core/playwright": "4.14.0",
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.64.1",
+    "eslint": "10.13.0",
+    "eslint-plugin-astro": "3.2.1",
+    "globals": "17.13.0",
+    "html-validate": "11.17.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.0",
+    "vitest": "5.0.5",
+    "wrangler": "4.151.3"
+  }
+}

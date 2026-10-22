@@ -1,0 +1,10 @@
+{
+  "name": "@knovum/brand",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./identity": "./src/identity.ts",
+    "./tokens.css": "./src/tokens.css",
+    "./app-icon.png": "./src/app-icon.png"
+  }
+}

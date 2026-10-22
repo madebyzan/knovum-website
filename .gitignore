@@ -9,3 +9,16 @@ test-results/
 .env.*
 !.env.example
 .DS_Store
+
+**/node_modules/
+**/dist/
+**/.astro/
+**/.wrangler/
+**/playwright-report/
+**/test-results/
+**/.env
+**/.env.*
+!**/.env.example
+shots/
+
+delivery/

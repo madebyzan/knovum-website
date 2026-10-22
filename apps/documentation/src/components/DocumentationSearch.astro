@@ -1,0 +1,102 @@
+---
+const chinese = Astro.locals.starlightRoute.lang === "zh-CN";
+const label = chinese ? "搜索文档" : "Search documentation";
+---
+
+<documentation-search>
+  <button type="button" data-open aria-haspopup="dialog">
+    {label} <kbd aria-hidden="true">Ctrl K</kbd>
+  </button>
+  <dialog aria-label={label}>
+    <button type="button" data-close>
+      {chinese ? "关闭" : "Close"}
+    </button>
+    <div data-search></div>
+  </dialog>
+</documentation-search>
+<script>
+  import { PagefindUI } from "@pagefind/default-ui";
+  import "@pagefind/default-ui/css/ui.css";
+  class DocumentationSearch extends HTMLElement {
+    connectedCallback() {
+      const dialog = this.querySelector("dialog");
+      const host = this.querySelector<HTMLElement>("[data-search]");
+      if (!dialog || !host) return;
+      const controller = new AbortController();
+      this.cleanup = () => {
+        controller.abort();
+        this.search?.destroy();
+        this.search = undefined;
+      };
+      let initialized = false;
+      const open = () => {
+        if (!initialized) {
+          this.search = new PagefindUI({ element: host, bundlePath: "/pagefind/", showSubResults: true });
+          initialized = true;
+        }
+        dialog.showModal();
+        host.querySelector<HTMLInputElement>("input")?.focus();
+      };
+      this.querySelector("[data-open]")?.addEventListener("click", open, { signal: controller.signal });
+      this.querySelector("[data-close]")?.addEventListener("click", () => dialog.close(), {
+        signal: controller.signal,
+      });
+      document.addEventListener(
+        "keydown",
+        (event) => {
+          if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+            event.preventDefault();
+            if (dialog.open) dialog.close();
+            else open();
+          }
+        },
+        { signal: controller.signal },
+      );
+    }
+    private search: PagefindUI | undefined;
+    private cleanup: (() => void) | undefined;
+    disconnectedCallback() {
+      this.cleanup?.();
+    }
+  }
+  customElements.define("documentation-search", DocumentationSearch);
+</script>
+<style>
+  button {
+    cursor: pointer;
+    color: var(--sl-color-text);
+    background: var(--sl-color-bg);
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+  }
+  kbd {
+    margin-inline-start: 1.5rem;
+    font-size: 0.75rem;
+    opacity: 0.7;
+  }
+  dialog {
+    width: min(42rem, calc(100% - 2rem));
+    max-height: 80vh;
+    overflow: auto;
+    margin: 8vh auto;
+    padding: 1.5rem;
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 0.75rem;
+    color: var(--sl-color-text);
+    background: var(--sl-color-bg);
+  }
+  dialog::backdrop {
+    background: #0008;
+  }
+  [data-close] {
+    display: block;
+    margin-inline-start: auto;
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 50rem) {
+    kbd {
+      display: none;
+    }
+  }
+</style>

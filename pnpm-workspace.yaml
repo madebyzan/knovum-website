@@ -1,4 +1,8 @@
-# This site is its own workspace root, separate from the Knovum desktop app.
+packages:
+  - apps/*
+  - packages/*
+
+# Independent public-site workspace; never inherits the desktop application workspace.
 engineStrict: true
 strictPeerDependencies: false
 saveExact: true
@@ -12,3 +16,8 @@ minimumReleaseAgeExclude:
   - "@astrojs/telemetry@3.4.1"
   - astro@7.4.2
   - "@lobehub/icons-static-svg@1.97.0"
+# astro-icon imports astro/types but does not declare Astro as a dependency.
+packageExtensions:
+  astro-icon@1.2.0:
+    peerDependencies:
+      astro: ^7.2.10

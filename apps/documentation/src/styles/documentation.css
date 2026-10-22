@@ -1,0 +1,37 @@
+@import "@knovum/brand/tokens.css";
+
+:root {
+  --sl-font: var(--knovum-font-sans);
+  --sl-content-width: 46rem;
+  --sl-sidebar-width: 18rem;
+  --sl-color-accent-low: #172742;
+  --sl-color-accent: #739ddd;
+  --sl-color-accent-high: #d4e3fa;
+  --sl-color-bg: #17191d;
+  --sl-color-bg-nav: #17191d;
+  --sl-color-bg-sidebar: #17191d;
+}
+:root[data-theme="light"] {
+  --sl-color-accent-low: #eaf0fa;
+  --sl-color-accent: #245ca3;
+  --sl-color-accent-high: #17375e;
+  --sl-color-bg: var(--knovum-paper);
+  --sl-color-bg-nav: var(--knovum-paper);
+  --sl-color-bg-sidebar: var(--knovum-paper);
+}
+.sl-markdown-content {
+  line-height: 1.85;
+}
+.sl-markdown-content h2 {
+  margin-top: 2.5rem;
+  letter-spacing: -0.02em;
+}
+.sl-markdown-content h3 {
+  margin-top: 1.75rem;
+}
+.sl-markdown-content table {
+  font-size: 0.9rem;
+}
+h1 {
+  letter-spacing: -0.035em;
+}

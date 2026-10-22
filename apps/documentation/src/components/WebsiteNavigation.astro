@@ -1,0 +1,25 @@
+---
+import SocialIcons from "@astrojs/starlight/components/SocialIcons.astro";
+const origin = process.env["WEBSITE_URL"];
+if (!origin) throw new Error("WEBSITE_URL must be set to the website origin.");
+const chinese = Astro.locals.starlightRoute.lang === "zh-CN";
+const home = new URL(chinese ? "/zh/" : "/", origin);
+---
+
+<a class="website-link" href={home}>
+  {chinese ? "官网" : "Website"}
+</a>
+<SocialIcons>
+  <slot />
+</SocialIcons>
+<style>
+  .website-link {
+    color: var(--sl-color-text);
+    text-decoration: none;
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+  .website-link:hover {
+    text-decoration: underline;
+  }
+</style>
