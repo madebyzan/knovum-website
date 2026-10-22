@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { getImage } from "astro:assets";
 
-import appIcon from "@knovum/brand/app-icon.png";
+import appIcon from "../../../../assets/icons/knovum.png";
 import { DEFAULT_LOCALE } from "@/config/locales";
 import { site } from "@/config/site";
 import { themeColors } from "@/config/theme-colors";

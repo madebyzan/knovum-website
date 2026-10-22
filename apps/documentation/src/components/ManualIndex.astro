@@ -1,0 +1,105 @@
+---
+const chinese = Astro.locals.starlightRoute.lang === "zh-CN";
+const prefix = chinese ? "/zh" : "";
+const paths = [
+  {
+    number: "01",
+    title: chinese ? "完成第一条工作流" : "Complete your first workflow",
+    description: chinese
+      ? "从建立 Space 到核查引用、导出成果。"
+      : "From a new Space to checked citations and a portable result.",
+    href: "/getting-started/first-space/",
+    label: chinese ? "从这里开始" : "Start here",
+  },
+  {
+    number: "02",
+    title: chinese ? "让资料成为知识" : "Turn sources into knowledge",
+    description: chinese
+      ? "收集、组织、检索，再用证据回答问题。"
+      : "Capture, organize and retrieve. Answer with evidence.",
+    href: "/guides/knowledge/",
+    label: chinese ? "理解知识结构" : "Understand the structure",
+  },
+  {
+    number: "03",
+    title: chinese ? "创作与交付" : "Create and deliver",
+    description: chinese
+      ? "处理图像、视频和声音，保留每一步来源。"
+      : "Work with images, video and voice. Keep the input trail.",
+    href: "/guides/creation/",
+    label: chinese ? "查看创作指南" : "Explore creation",
+  },
+];
+const topics = [
+  [chinese ? "导入网站与文件" : "Import websites and files", "/guides/capture/"],
+  [chinese ? "提问与检查引用" : "Ask and check citations", "/guides/ask/"],
+  [chinese ? "配置 AI 服务商" : "Connect an AI provider", "/guides/providers/"],
+  [chinese ? "转写一段录音" : "Transcribe a recording", "/guides/transcription/"],
+  [chinese ? "导出与迁移" : "Export and transfer", "/guides/export/"],
+  [chinese ? "备份与恢复资料库" : "Back up the library", "/guides/backup/"],
+];
+---
+
+<div class="manual-index">
+  <div class="manual-introduction">
+    <p class="manual-caption">{chinese ? "KNOVUM · 使用手册" : "KNOVUM · USER MANUAL"}</p>
+    <h1 id="_top">{chinese ? "从资料，到有依据的成果。" : "From sources to work you can stand behind."}</h1>
+    <p class="manual-lead">
+      {chinese
+        ? "这份手册帮助你完成真实的知识工作：收集资料，建立联系，核查答案，再将成果带走。"
+        : "A practical manual for collecting sources, connecting ideas, checking answers, and taking your work with you."}
+    </p>
+    <div class="manual-actions">
+      <a class="manual-primary" href={`${prefix}/getting-started/first-space/`}>
+        {chinese ? "建立第一个 Space" : "Build your first Space"}
+        <span aria-hidden="true"> →</span>
+      </a>
+      <a href={`${prefix}/getting-started/installation/`}>
+        {chinese ? "下载安装" : "Install Knovum"}
+        <span aria-hidden="true"> ↗</span>
+      </a>
+    </div>
+  </div>
+  <section class="manual-paths" aria-labelledby="learning-paths">
+    <h2 id="learning-paths">{chinese ? "按工作路径阅读" : "Follow a working path"}</h2>
+    {paths.map((path) => (
+      <a class="manual-path" href={prefix + path.href}>
+        <span class="manual-number">{path.number}</span>
+        <div>
+          <h3>{path.title}</h3>
+          <p>{path.description}</p>
+        </div>
+        <span class="manual-path-action">
+          {path.label}
+          <span aria-hidden="true"> →</span>
+        </span>
+      </a>
+    ))}
+  </section>
+  <section class="manual-topics" aria-labelledby="common-tasks">
+    <h2 id="common-tasks">{chinese ? "直接找到要做的事" : "Get straight to the task"}</h2>
+    <div>
+      {topics.map(([label, href]) => (
+        <a href={prefix + (href ?? "")}>
+          {label}
+          <span aria-hidden="true">↗</span>
+        </a>
+      ))}
+    </div>
+  </section>
+  <aside class="manual-boundary" aria-labelledby="privacy-boundary">
+    <h2 id="privacy-boundary">
+      {chinese
+        ? "知道资料在哪里，也知道它何时离开本机。"
+        : "Know where your sources live—and when they leave."}
+    </h2>
+    <p>
+      {chinese
+        ? "资料与索引保存在本地。网页采集、模型下载与明确选择的外部执行器有各自的网络边界。"
+        : "Sources and indexes are local. Website capture, model downloads and selected external executors have distinct network boundaries."}
+    </p>
+    <a href={`${prefix}/reference/privacy/`}>
+      {chinese ? "阅读隐私与 AI 边界" : "Read the privacy boundaries"} →
+    </a>
+  </aside>
+</div>

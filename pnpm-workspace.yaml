@@ -1,6 +1,5 @@
 packages:
   - apps/*
-  - packages/*
 
 # Independent public-site workspace; never inherits the desktop application workspace.
 engineStrict: true

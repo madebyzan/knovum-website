@@ -1,11 +1,11 @@
 import { readFile } from "node:fs/promises";
-import { fileURLToPath } from "node:url";
+import { resolve } from "node:path";
 
 import type { APIRoute } from "astro";
 import sharp from "sharp";
 
-/** The one source icon. Resolve the brand-owned resource through its package contract. */
-const SOURCE_ICON = fileURLToPath(import.meta.resolve("@knovum/brand/app-icon.png"));
+/** The one source icon. Build from the repository-owned application icon. */
+const SOURCE_ICON = resolve(process.cwd(), "../../assets/icons/knovum.png");
 
 /**
  * Browsers and crawlers ask for `/favicon.ico` whatever the page declares. Every current browser

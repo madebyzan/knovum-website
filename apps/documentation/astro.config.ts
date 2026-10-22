@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import starlight from "@astrojs/starlight";
 import { defineConfig } from "astro/config";
-import { PRODUCT_NAME, PRODUCT_REPOSITORY_URL } from "@knovum/brand/identity";
+import { PRODUCT_NAME, PRODUCT_REPOSITORY_URL } from "../../config/product.ts";
 
 if (existsSync(".env")) process.loadEnvFile(".env");
 const site = process.env["SITE_URL"];
@@ -15,9 +15,10 @@ export default defineConfig({
       title: PRODUCT_NAME,
       description: "Practical guides for the Knovum knowledge workspace.",
       locales: { root: { label: "English", lang: "en" }, zh: { label: "简体中文", lang: "zh-CN" } },
-      logo: { src: "../../packages/brand/src/app-icon.png", replacesTitle: false },
+      logo: { src: "../../assets/icons/knovum.png", replacesTitle: false },
       customCss: ["./src/styles/documentation.css"],
       components: {
+        PageTitle: "./src/components/ReadingHeader.astro",
         Search: "./src/components/DocumentationSearch.astro",
         SocialIcons: "./src/components/WebsiteNavigation.astro",
       },

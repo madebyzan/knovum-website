@@ -21,10 +21,10 @@ for (const application of ["website", "documentation"]) {
     }
   });
 }
-test("brand owns no application dependency or global reset", () => {
-  const manifest = JSON.parse(readFileSync(resolve(root, "packages/brand/package.json"), "utf8"));
-  assert.equal(manifest.dependencies, undefined);
-  const stylesheet = readFileSync(resolve(root, "packages/brand/src/tokens.css"), "utf8");
+test("shared facts and visual tokens own no application dependency or reset", () => {
+  const configuration = readFileSync(resolve(root, "config/product.ts"), "utf8");
+  assert.doesNotMatch(configuration, /from |import |apps\//);
+  const stylesheet = readFileSync(resolve(root, "styles/visual-tokens.css"), "utf8");
   assert.doesNotMatch(stylesheet, /tailwind|starlight|\*\s*\{/);
 });
 test("documentation build does not depend on a product release", () => {

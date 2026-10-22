@@ -1,4 +1,4 @@
-import { PRODUCT_NAME, PRODUCT_REPOSITORY } from "@knovum/brand/identity";
+import { PRODUCT_NAME, PRODUCT_REPOSITORY } from "../../../../config/product.ts";
 
 /**
  * Facts about the product and where it lives. Anything a reader sees as words belongs in

@@ -28,10 +28,10 @@ test("search finds a published guide without external services", async ({ page }
 
 test("every published document and internal link resolves", async ({ page }) => {
   const sources = readdirSync("src/content/docs", { recursive: true, encoding: "utf8" }).filter((path) =>
-    path.endsWith(".md"),
+    /\.mdx?$/.test(path),
   );
   for (const source of sources) {
-    const route = "/" + source.replace(/index\.md$/, "").replace(/\.md$/, "/");
+    const route = "/" + source.replace(/index\.mdx?$/, "").replace(/\.mdx?$/, "/");
     await page.goto(route);
     await expect(page.locator("h1")).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), route).toBe(true);

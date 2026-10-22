@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "@knovum/brand/tokens.css";
+@import "../../../../styles/visual-tokens.css";
 
 /*
  * The design system, declared once. Tailwind's default palette, type scale, radii and shadows are

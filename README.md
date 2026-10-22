@@ -5,15 +5,17 @@ One repository, two independently built static applications. The product itself 
 
 ## Ownership
 
-| Owner                | Responsibility                                                | Deployment                      |
-| -------------------- | ------------------------------------------------------------- | ------------------------------- |
-| `apps/website`       | Product story, interactive demos, releases and downloads      | Main website domain             |
-| `apps/documentation` | User guides, reference, multilingual reading and local search | `docs.<website-domain>`         |
-| `packages/brand`     | Product identity, app icon and shared design decisions only   | Bundled into either application |
-| `tooling`            | Cross-application architecture checks                         | Development only                |
+| Owner                      | Responsibility                                                | Deployment              |
+| -------------------------- | ------------------------------------------------------------- | ----------------------- |
+| `apps/website`             | Product story, interactive demos, releases and downloads      | Main website domain     |
+| `apps/documentation`       | User guides, reference, multilingual reading and local search | `docs.<website-domain>` |
+| `config/product.ts`        | Product name and repository facts                             | Explicit imports        |
+| `assets/icons/`            | Application icon source                                       | Bundled per application |
+| `styles/visual-tokens.css` | Shared visual tokens; no reset or layout                      | Application styles      |
+| `tooling`                  | Cross-application architecture checks                         | Development only        |
 
-The applications never import one another. Brand never depends on an application. Do not introduce a
-shared UI warehouse: website navigation, documentation navigation and content layouts are different
+The applications never import one another. Root configuration and resources never depend on an application. Do not introduce a
+generic shared-component directory: website navigation, documentation navigation and content layouts are different
 responsibilities. Tailwind resets stay in website; Starlight owns documentation structure and styles.
 Focused unit tests live in their implementation owner's `__tests__/`; cross-owner browser scenarios
 live in each application's `tests/e2e/`.

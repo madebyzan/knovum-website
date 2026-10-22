@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 const directory = resolve("src/content/docs");
 const pages = readdirSync(directory, { recursive: true, encoding: "utf8" }).filter((path) =>
-  path.endsWith(".md"),
+  /\.mdx?$/.test(path),
 );
 describe("documentation publication", () => {
   it("has an explicit translation for every English page", () => {
@@ -18,10 +18,13 @@ describe("documentation publication", () => {
       for (const match of content.matchAll(/\]\((\.\.?\/[^)#]+)\)/g)) {
         const target = new URL(
           match[1] ?? "",
-          `https://docs.example.com/${page.replace(/(?:index)?\.md$/, "")}`,
+          `https://docs.example.com/${page.replace(/(?:index)?\.mdx?$/, "")}`,
         );
         const relative = target.pathname.replace(/^\//, "").replace(/\/$/, "");
-        expect(pages, `${page} → ${target.pathname}`).toContain(`${relative}.md`);
+        expect(
+          pages.some((candidate) => candidate === `${relative}.md` || candidate === `${relative}.mdx`),
+          `${page} → ${target.pathname}`,
+        ).toBe(true);
       }
     }
   });

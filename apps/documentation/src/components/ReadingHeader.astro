@@ -1,0 +1,46 @@
+---
+import PageTitle from "@astrojs/starlight/components/PageTitle.astro";
+const { entry, lang } = Astro.locals.starlightRoute;
+const isIndex = /(?:^|\/)index$/.test(entry.id) || entry.id === "" || entry.id === "zh";
+const chinese = lang === "zh-CN";
+const words = entry.body?.length ?? 0;
+const minutes = Math.max(2, Math.ceil(words / (chinese ? 650 : 1100)));
+const category = entry.id.includes("reference/")
+  ? chinese
+    ? "参考"
+    : "Reference"
+  : chinese
+    ? "使用指南"
+    : "Guide";
+---
+
+{!isIndex && (
+  <div class="reading-header">
+    <div class="reading-context">
+      <span>{category}</span>
+      <span>{chinese ? `约 ${String(minutes)} 分钟` : `${String(minutes)} min read`}</span>
+    </div>
+    <PageTitle />
+    {entry.data.description && <p class="reading-summary">{entry.data.description}</p>}
+  </div>
+)}
+<style>
+  .reading-context {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    color: var(--sl-color-gray-2);
+    font-size: 0.8rem;
+  }
+  .reading-context span + span {
+    border-inline-start: 1px solid var(--sl-color-hairline);
+    padding-inline-start: 1rem;
+  }
+  .reading-summary {
+    margin-top: 1rem;
+    max-width: 40rem;
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: var(--sl-color-gray-2);
+  }
+</style>
