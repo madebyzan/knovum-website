@@ -1,3 +1,10 @@
+/*
+ * This stylesheet is bundled ahead of Starlight's own, so it must state Starlight's layer order first.
+ * Otherwise the first layer named below is ordered before `starlight.reset`, and the reset wipes out
+ * every typographic margin. Mirrors `@astrojs/starlight/dist/style/layers.css`.
+ */
+@layer starlight.base, starlight.reset, starlight.core, starlight.content, starlight.components, starlight.utils;
+
 @import "../../../../styles/visual-tokens.css";
 
 /*
@@ -10,6 +17,8 @@
   --sl-sidebar-width: 18rem;
   --sl-text-h1: clamp(2rem, 4vw, 2.7rem);
   --sl-text-h2: 1.5rem;
+  /* Space between blocks of prose: paragraphs, lists, tables, asides. */
+  --sl-content-gap-y: 1.35rem;
   --sl-color-bg: #17191d;
   --sl-color-bg-nav: #17191d;
   --sl-color-bg-sidebar: #17191d;
@@ -30,26 +39,37 @@ h1 {
   letter-spacing: -0.035em;
 }
 
-/* Overrides live in the Starlight layer they refine, so component styles always take precedence. */
+/*
+ * Overrides live in the Starlight layer they refine. Selectors are at least as specific as Starlight's
+ * own, because this file is bundled first and would otherwise lose every tie.
+ */
 @layer starlight.content {
   .sl-markdown-content {
-    line-height: 1.85;
+    line-height: 1.9;
+  }
+
+  /* Sections breathe; a heading sits close to the text it introduces. */
+  .sl-markdown-content > .sl-heading-wrapper.level-h2:not(:first-child) {
+    margin-top: 3.5rem;
+  }
+  .sl-markdown-content > .sl-heading-wrapper.level-h3:not(:first-child) {
+    margin-top: 2.25rem;
+  }
+  .sl-markdown-content > .sl-heading-wrapper + :not(.sl-heading-wrapper) {
+    margin-top: 0.85rem;
   }
   .sl-markdown-content h2 {
-    margin-top: 2.75rem;
     letter-spacing: -0.02em;
   }
-  .sl-markdown-content h3 {
-    margin-top: 1.75rem;
-  }
+
   .sl-markdown-content a {
     text-underline-offset: 0.22em;
   }
   .sl-markdown-content :is(ul, ol) {
     padding-inline-start: 1.5rem;
   }
-  .sl-markdown-content li + li {
-    margin-top: 0.55rem;
+  .sl-markdown-content :is(ul, ol) > li + li {
+    margin-top: 0.6rem;
   }
   .sl-markdown-content table {
     font-size: 0.9rem;

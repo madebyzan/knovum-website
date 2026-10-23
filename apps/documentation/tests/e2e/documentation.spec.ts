@@ -46,6 +46,22 @@ for (const route of ROUTES) {
   });
 }
 
+test("reading typography keeps its vertical rhythm", async ({ page }) => {
+  await page.goto("/zh/tutorials/interviews/");
+  const gaps = await page.evaluate(() => {
+    const top = (selector: string) =>
+      Number.parseFloat(getComputedStyle(document.querySelector(selector) ?? document.body).marginTop);
+    return {
+      paragraph: top(".sl-markdown-content > p + p"),
+      section: top(".sl-markdown-content > .sl-heading-wrapper.level-h2:not(:first-child)"),
+      aside: top(".sl-markdown-content > .starlight-aside"),
+    };
+  });
+  expect(gaps.paragraph).toBeGreaterThan(12);
+  expect(gaps.aside).toBeGreaterThan(12);
+  expect(gaps.section).toBeGreaterThan(gaps.paragraph * 2);
+});
+
 test("search finds a published guide without external services", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: /search/i }).click();
