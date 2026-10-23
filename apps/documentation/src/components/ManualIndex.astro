@@ -1,105 +1,338 @@
 ---
-const chinese = Astro.locals.starlightRoute.lang === "zh-CN";
-const prefix = chinese ? "/zh" : "";
-const paths = [
-  {
-    number: "01",
-    title: chinese ? "完成第一条工作流" : "Complete your first workflow",
-    description: chinese
-      ? "从建立 Space 到核查引用、导出成果。"
-      : "From a new Space to checked citations and a portable result.",
-    href: "/getting-started/first-space/",
-    label: chinese ? "从这里开始" : "Start here",
+/**
+ * The manual's front page: what Knovum is for, a way in for each kind of reader, and the tasks
+ * people look up most. Links are written once, without a locale; the language prefix is applied here.
+ */
+interface Path {
+  readonly title: string;
+  readonly description: string;
+  readonly href: string;
+}
+
+interface IndexCopy {
+  readonly caption: string;
+  readonly title: string;
+  readonly lead: string;
+  readonly primary: string;
+  readonly secondary: string;
+  readonly pathsTitle: string;
+  readonly paths: readonly [Path, Path, Path];
+  readonly topicsTitle: string;
+  readonly topics: readonly (readonly [label: string, href: string])[];
+  readonly boundaryTitle: string;
+  readonly boundaryBody: string;
+  readonly boundaryLink: string;
+}
+
+const COPY: Readonly<Record<"en" | "zh", IndexCopy>> = {
+  en: {
+    caption: "Knovum documentation",
+    title: "Learn Knovum",
+    lead: "From a pile of recordings, pages and documents to a conclusion you can defend: bring sources into a Space, transcribe and search them on your computer, ask questions, and check every citation against the original.",
+    primary: "Start with your first Space",
+    secondary: "Learn the concepts",
+    pathsTitle: "Learn by doing",
+    paths: [
+      {
+        title: "Your first Space",
+        description: "Two sources, one question, and a conclusion you have checked yourself.",
+        href: "/getting-started/first-space/",
+      },
+      {
+        title: "Research from interviews",
+        description:
+          "Transcribe recordings, separate speakers, and tie each finding to the moment it was said.",
+        href: "/tutorials/interviews/",
+      },
+      {
+        title: "Meeting and lecture notes",
+        description: "Turn an hour of audio into notes where every decision opens to its source.",
+        href: "/tutorials/meetings/",
+      },
+    ],
+    topicsTitle: "Look up a task",
+    topics: [
+      ["Ask and check citations", "/guides/ask/"],
+      ["Transcribe a recording", "/guides/transcription/"],
+      ["Organize a Space", "/guides/organization/"],
+      ["Search by keyword or meaning", "/guides/search/"],
+      ["Create from a selection", "/guides/creation/"],
+      ["Connect an AI provider", "/guides/providers/"],
+    ],
+    boundaryTitle: "Your material stays on your computer.",
+    boundaryBody:
+      "The library, imported files and the search index are local. Content leaves only when you save a website, download a model, or choose a cloud AI service for an operation.",
+    boundaryLink: "Privacy and AI boundaries",
   },
-  {
-    number: "02",
-    title: chinese ? "让资料成为知识" : "Turn sources into knowledge",
-    description: chinese
-      ? "收集、组织、检索，再用证据回答问题。"
-      : "Capture, organize and retrieve. Answer with evidence.",
-    href: "/guides/knowledge/",
-    label: chinese ? "理解知识结构" : "Understand the structure",
+  zh: {
+    caption: "Knovum 使用手册",
+    title: "学会使用 Knovum",
+    lead: "从一堆录音、网页和文档，到一个经得起追问的结论：把资料放进空间，在本机转录和搜索，向资料提问，再把每条引用和原文逐一对照。",
+    primary: "从第一个空间开始",
+    secondary: "了解核心概念",
+    pathsTitle: "跟着做一遍",
+    paths: [
+      {
+        title: "建立第一个空间",
+        description: "两份资料、一个问题，得出一个你亲自核对过的结论。",
+        href: "/getting-started/first-space/",
+      },
+      {
+        title: "访谈研究：从录音到结论",
+        description: "转录录音、识别说话人，让每条发现都连着受访者说出它的那一刻。",
+        href: "/tutorials/interviews/",
+      },
+      {
+        title: "会议与课程：把录音变成纪要",
+        description: "把一小时的录音整理成纪要，每项决定都能打开原声。",
+        href: "/tutorials/meetings/",
+      },
+    ],
+    topicsTitle: "查找具体操作",
+    topics: [
+      ["提问与核查引用", "/guides/ask/"],
+      ["转录一段录音", "/guides/transcription/"],
+      ["整理空间", "/guides/organization/"],
+      ["按关键词或语义搜索", "/guides/search/"],
+      ["用选中项创建", "/guides/creation/"],
+      ["配置 AI 服务商", "/guides/providers/"],
+    ],
+    boundaryTitle: "资料留在你自己的电脑上。",
+    boundaryBody:
+      "资料库、导入的文件和搜索索引都在本地。只有收藏网页、下载模型，或者为某次操作选择云端 AI 服务时，内容才会离开本机。",
+    boundaryLink: "隐私与 AI 边界",
   },
-  {
-    number: "03",
-    title: chinese ? "创作与交付" : "Create and deliver",
-    description: chinese
-      ? "处理图像、视频和声音，保留每一步来源。"
-      : "Work with images, video and voice. Keep the input trail.",
-    href: "/guides/creation/",
-    label: chinese ? "查看创作指南" : "Explore creation",
-  },
-];
-const topics = [
-  [chinese ? "导入网站与文件" : "Import websites and files", "/guides/capture/"],
-  [chinese ? "提问与检查引用" : "Ask and check citations", "/guides/ask/"],
-  [chinese ? "配置 AI 服务商" : "Connect an AI provider", "/guides/providers/"],
-  [chinese ? "转写一段录音" : "Transcribe a recording", "/guides/transcription/"],
-  [chinese ? "导出与迁移" : "Export and transfer", "/guides/export/"],
-  [chinese ? "备份与恢复资料库" : "Back up the library", "/guides/backup/"],
-];
+};
+
+const language = Astro.locals.starlightRoute.lang === "zh-CN" ? "zh" : "en";
+const copy = COPY[language];
+const at = (href: string) => (language === "zh" ? `/zh${href}` : href);
 ---
 
-<div class="manual-index">
-  <div class="manual-introduction">
-    <p class="manual-caption">{chinese ? "KNOVUM · 使用手册" : "KNOVUM · USER MANUAL"}</p>
-    <h1 id="_top">{chinese ? "从资料，到有依据的成果。" : "From sources to work you can stand behind."}</h1>
-    <p class="manual-lead">
-      {chinese
-        ? "这份手册帮助你完成真实的知识工作：收集资料，建立联系，核查答案，再将成果带走。"
-        : "A practical manual for collecting sources, connecting ideas, checking answers, and taking your work with you."}
-    </p>
-    <div class="manual-actions">
-      <a class="manual-primary" href={`${prefix}/getting-started/first-space/`}>
-        {chinese ? "建立第一个 Space" : "Build your first Space"}
-        <span aria-hidden="true"> →</span>
+<div class="index not-content">
+  <header class="introduction">
+    <p class="caption">{copy.caption}</p>
+    <h1 id="_top">{copy.title}</h1>
+    <p class="lead">{copy.lead}</p>
+    <div class="actions">
+      <a class="primary" href={at("/getting-started/first-space/")}>
+        {copy.primary}
+        <span aria-hidden="true">→</span>
       </a>
-      <a href={`${prefix}/getting-started/installation/`}>
-        {chinese ? "下载安装" : "Install Knovum"}
-        <span aria-hidden="true"> ↗</span>
+      <a class="secondary" href={at("/getting-started/concepts/")}>
+        {copy.secondary}
       </a>
     </div>
-  </div>
-  <section class="manual-paths" aria-labelledby="learning-paths">
-    <h2 id="learning-paths">{chinese ? "按工作路径阅读" : "Follow a working path"}</h2>
-    {paths.map((path) => (
-      <a class="manual-path" href={prefix + path.href}>
-        <span class="manual-number">{path.number}</span>
-        <div>
-          <h3>{path.title}</h3>
-          <p>{path.description}</p>
-        </div>
-        <span class="manual-path-action">
-          {path.label}
-          <span aria-hidden="true"> →</span>
-        </span>
-      </a>
-    ))}
-  </section>
-  <section class="manual-topics" aria-labelledby="common-tasks">
-    <h2 id="common-tasks">{chinese ? "直接找到要做的事" : "Get straight to the task"}</h2>
-    <div>
-      {topics.map(([label, href]) => (
-        <a href={prefix + (href ?? "")}>
-          {label}
-          <span aria-hidden="true">↗</span>
-        </a>
+  </header>
+
+  <section aria-labelledby="learning-paths">
+    <h2 id="learning-paths">{copy.pathsTitle}</h2>
+    <ol class="paths">
+      {copy.paths.map((path, index) => (
+        <li>
+          <a href={at(path.href)}>
+            <span class="number">{String(index + 1).padStart(2, "0")}</span>
+            <span class="path-text">
+              <strong>{path.title}</strong>
+              <span>{path.description}</span>
+            </span>
+            <span class="arrow" aria-hidden="true">
+              →
+            </span>
+          </a>
+        </li>
       ))}
-    </div>
+    </ol>
   </section>
-  <aside class="manual-boundary" aria-labelledby="privacy-boundary">
-    <h2 id="privacy-boundary">
-      {chinese
-        ? "知道资料在哪里，也知道它何时离开本机。"
-        : "Know where your sources live—and when they leave."}
-    </h2>
-    <p>
-      {chinese
-        ? "资料与索引保存在本地。网页采集、模型下载与明确选择的外部执行器有各自的网络边界。"
-        : "Sources and indexes are local. Website capture, model downloads and selected external executors have distinct network boundaries."}
-    </p>
-    <a href={`${prefix}/reference/privacy/`}>
-      {chinese ? "阅读隐私与 AI 边界" : "Read the privacy boundaries"} →
-    </a>
+
+  <section aria-labelledby="common-tasks">
+    <h2 id="common-tasks">{copy.topicsTitle}</h2>
+    <ul class="topics">
+      {copy.topics.map(([label, href]) => (
+        <li>
+          <a href={at(href)}>
+            {label}
+            <span class="arrow" aria-hidden="true">
+              →
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <aside class="boundary" aria-labelledby="privacy-boundary">
+    <h2 id="privacy-boundary">{copy.boundaryTitle}</h2>
+    <p>{copy.boundaryBody}</p>
+    <a href={at("/reference/privacy/")}>{copy.boundaryLink} →</a>
   </aside>
 </div>
+
+<style>
+  .index {
+    padding-block: 1rem 3rem;
+  }
+  .index :is(ol, ul) {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .index a {
+    color: var(--sl-color-white);
+    text-decoration: none;
+  }
+  .introduction {
+    max-width: 44rem;
+    padding-block: 2rem 3.5rem;
+  }
+  .caption {
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    color: var(--sl-color-gray-3);
+  }
+  h1 {
+    margin-bottom: 0;
+    margin-top: 1.25rem;
+    font-size: clamp(2.5rem, 5.5vw, 4rem);
+    line-height: 1.1;
+    font-weight: 600;
+    letter-spacing: -0.045em;
+  }
+  .lead {
+    margin-block: 1.5rem 0;
+    font-size: 1.125rem;
+    line-height: 1.9;
+    color: var(--sl-color-gray-2);
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.75rem;
+    margin-top: 2.25rem;
+    font-size: 0.95rem;
+  }
+  a.primary {
+    display: inline-flex;
+    gap: 1rem;
+    padding: 0.8rem 1.15rem;
+    border-radius: 0.3rem;
+    background: var(--sl-color-white);
+    color: var(--sl-color-black);
+  }
+  a.secondary {
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+    text-decoration-color: var(--sl-color-gray-4);
+  }
+  section {
+    border-top: 1px solid var(--sl-color-hairline);
+  }
+  section + section {
+    margin-top: 2.5rem;
+  }
+  section > h2 {
+    margin: 0;
+    padding-block: 1.5rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--sl-color-gray-3);
+  }
+  .paths a {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr auto;
+    gap: 1.5rem;
+    align-items: baseline;
+    padding-block: 1.6rem;
+    border-bottom: 1px solid var(--sl-color-hairline);
+  }
+  .number {
+    font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--sl-color-gray-3);
+  }
+  .path-text {
+    display: grid;
+    gap: 0.45rem;
+  }
+  .path-text strong {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  .path-text span {
+    font-size: 0.95rem;
+    color: var(--sl-color-gray-2);
+  }
+  .arrow {
+    color: var(--sl-color-gray-3);
+    transition: transform 0.2s ease;
+  }
+  a:hover .arrow {
+    color: var(--sl-color-white);
+    transform: translateX(0.25rem);
+  }
+  .paths a:hover strong {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .topics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 3rem;
+  }
+  .topics a {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--sl-color-hairline);
+    font-size: 0.95rem;
+  }
+  .boundary {
+    margin-top: 3.5rem;
+    padding: 1.75rem;
+    border-radius: 0.3rem;
+    background: var(--sl-color-gray-6);
+  }
+  .boundary h2 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+  .boundary p {
+    margin-block: 0.75rem 1rem;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--sl-color-gray-2);
+  }
+  .boundary a {
+    font-size: 0.95rem;
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .arrow {
+      transition: none;
+    }
+  }
+  @media (max-width: 50rem) {
+    .introduction {
+      padding-top: 1rem;
+    }
+    .paths a {
+      grid-template-columns: 1.75rem 1fr;
+      gap: 0.75rem;
+    }
+    .paths .arrow {
+      display: none;
+    }
+    .topics {
+      grid-template-columns: 1fr;
+    }
+    .boundary {
+      padding: 1.25rem;
+    }
+  }
+</style>

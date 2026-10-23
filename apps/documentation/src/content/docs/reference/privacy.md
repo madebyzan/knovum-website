@@ -1,27 +1,39 @@
 ---
 title: Privacy and AI boundaries
-description: Understand what stays local, what can leave, and how credentials are stored.
+description: What stays on your computer, what is sent out and to whom, and how keys are stored.
 ---
 
-## What stays local
+## What stays on your computer
 
-Space structure, managed assets, extracted text and search indexes are stored on your computer. Keyword search, embedding inference and ordinary speech transcription run locally once their required resources are installed.
+- Every Space, the canvas structure and everything you write.
+- Copies of imported files and the text extracted from them.
+- Search indexes, including the semantic search index.
+- Work done by local models: transcription, speaker identification, semantic search, background removal, upscaling, repair, speech synthesis and stem separation.
 
-Local storage does not automatically mean encrypted storage. Protect the device and exported packages with appropriate operating-system security and disk encryption.
+Once their models are downloaded, these features run fully offline.
 
-## Network boundaries
+## When Knovum goes online
 
-| Operation                                   | Network use                                                           |
-| ------------------------------------------- | --------------------------------------------------------------------- |
-| Save a website                              | Fetches the requested site and available preview resources            |
-| Prepare local models/tools                  | Downloads verified resources                                          |
-| Provider-backed generation or understanding | Sends the context required by the selected operation to that executor |
-| External Agent                              | Uses that Agent’s own authentication and tool permissions             |
+| What you do                            | Sent to                                | What is sent                                        |
+| -------------------------------------- | -------------------------------------- | --------------------------------------------------- |
+| Add or refresh a web page              | That website                           | An ordinary page request                            |
+| Use a local feature for the first time | The model download source              | A download request; files are verified afterwards   |
+| Ask or generate with an AI provider    | The provider you chose for that action | What the action needs, such as the selected sources |
+| Use a desktop Agent                    | That Agent and the services it uses    | Determined by the Agent's own configuration         |
+| Use an MCP connection                  | That MCP server                        | The arguments of tools you allowed                  |
+| Check for updates                      | Knovum's release service               | A version check                                     |
 
-A model installed through Ollama or another local endpoint is different from a hosted provider, but you must still check that endpoint’s actual configuration. “Local-first” does not guarantee every configured executor is local.
+Knovum never sends your material to a provider without your knowledge, and never quietly retries with another provider when one fails.
 
-## Credentials
+## Keys and credentials
 
-Provider keys and Sensitive Information secret values belong to a separate local credential database. Canvas content stores descriptive status rather than the secret value. Duplicating a credential object does not duplicate its secret.
+API keys, connection tokens and other secrets are kept in a separate credential store on your computer, never in Space content or logs. A credential node on the canvas holds only a name and its configuration status; duplicating the node doesn't copy the secret.
 
-Before sharing exported JSON, documents or Space packages, inspect what they contain. Avoid putting actual credentials into ordinary notes or prompts; those are content, not protected credential fields.
+Neither Space packages nor library backups contain credentials. After restoring a backup, enter the keys for your providers and connections again.
+
+## What to keep in mind
+
+- **Local isn't encrypted**: your material is stored on your computer and Knovum doesn't encrypt it separately. Use the system's disk encryption (FileVault on macOS, BitLocker on Windows) to protect the computer and exported files.
+- **A “local” endpoint may not be local**: an Ollama server on a remote machine is still remote, whatever you name it.
+- **A key in a note is ordinary content**: it can be searched and exported with the Space. Put keys only in credential fields.
+- **Look before you share**: check what an exported Space package, document or JSON file contains before sharing it.

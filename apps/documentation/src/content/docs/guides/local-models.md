@@ -1,22 +1,47 @@
 ---
 title: Manage local models
-description: Understand preparation, resource requirements and frozen model choices.
+description: Which features use local models, when they download, and how to pick the right version for your computer.
 ---
 
-## Prepare only what you use
+Transcription, semantic search, image processing and speech synthesis use local models on your computer. They aren't downloaded with the app; each is prepared the first time you use a feature that needs it. Once downloaded, those features work offline and your material never leaves the machine.
 
-Settings organizes built-in models by knowledge, audio and image capabilities. It shows download/installed sizes, preparation progress, verification and removal of idle optional resources. Starting a capability also prepares its required resource; you do not need to install every model first.
+## Where to manage them
 
-Preparation is not inference. A download may finish before verification or a task begins. Task Center distinguishes those phases. CPU/GPU choice is managed by the application; a failed GPU request is not silently retried on CPU or another model.
+Press <kbd>⌘/Ctrl</kbd> + <kbd>,</kbd> and go to **Intelligence → Local models**. Models are grouped under **Knowledge retrieval**, **Audio and speech** and **Images**, each with its purpose, file size and download status. You can search by model or feature, and filter by **Downloaded** or **Not downloaded**.
 
-## Choose with the machine in mind
+| Feature               | Models                                                                |
+| --------------------- | --------------------------------------------------------------------- |
+| Semantic search       | Qwen3 Embedding (fixed, used by the existing index)                   |
+| Transcription         | Whisper Tiny, Small, Large V3                                         |
+| Alignment             | Qwen3 Aligner and its quantized version, up to five minutes at a time |
+| Speakers              | Sherpa, light and full precision                                      |
+| Stem separation       | Spleeter, light and full precision; audio up to ten minutes           |
+| Speech synthesis      | MOSS-TTS-Nano, VoxCPM2 and its quantized version                      |
+| Background removal    | U²-Net, light and full                                                |
+| Image upscaling       | Real-ESRGAN, light and full                                           |
+| Repair selected areas | MI-GAN                                                                |
+| Smart selection       | EfficientSAM Ti, S                                                    |
+| Relative depth        | Depth Anything V2 Small and its quantized version                     |
 
-Core knowledge indexing does not require a discrete GPU. Apple silicon has supported Metal paths for embeddings and transcription; other supported targets use their admitted CPU paths. CUDA is not a shipped backend.
+## Choose a default
 
-Optional VoxCPM2 voice work requires at least 32 GiB physical memory and adequate currently available memory. The alignment profiles also reserve significant memory. A smaller model download is not a measured promise of lower RAM or faster rendering. If admission fails, stop competing heavy work or choose an appropriate new operation rather than forcing the task.
+When a feature has several models, choose **Set as default** to make one the **Default for new operations**. In general, light versions are faster and smaller; full versions are more accurate and take longer.
 
-## Changes affect new work
+Changing the default affects only new operations. Queued tasks, finished results and existing speech projects keep their original choice.
 
-Changing a default selects the model for new requests. Queued jobs, accepted results, existing speech projects and immutable voices retain their chosen model identity. Removing an idle model does not change the preference; its next use prepares the same resource again.
+## Download and remove
 
-Never manually replace weight files or modify private model directories. Verification failures should be handled through the visible preparation controls. To move knowledge to another computer, export a Space or library backup; model downloads are a separate preparation step.
+- The first time you use a feature, its model downloads automatically, with progress in the **Tasks** panel. Files are verified after download, and a model is used only once verification passes.
+- To prepare in advance, choose **Download** in the list.
+- **Remove** models you rarely use to free disk space. Content you already generated is kept, and the model downloads again next time.
+- If you see **Verification failed; download again**, choose **Download again**. Don't replace model files by hand.
+
+## What your computer needs
+
+- Core features need no dedicated graphics card. Apple silicon Macs use Metal to accelerate transcription and semantic search; other computers use the CPU.
+- Voice cloning and design with VoxCPM2 need at least 32 GiB of memory. With less, use MOSS-TTS-Nano.
+- Several large tasks at once run more slowly. When resources are tight, let other heavy tasks finish first or switch to a light model.
+
+## On a new computer
+
+Models aren't included in Space packages or library backups. On a new computer they download again the first time they're needed.

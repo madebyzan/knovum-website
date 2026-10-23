@@ -2,8 +2,8 @@ import { expect, test as base, type Page } from "@playwright/test";
 
 /** The pages every check runs against, with what each must say about itself. */
 export const PAGES = [
-  { path: "/", lang: "en", title: /local-first knowledge workspace/ },
-  { path: "/zh/", lang: "zh-CN", title: /本地优先的知识工作台/ },
+  { path: "/", lang: "en", title: /Answers that cite your own sources/ },
+  { path: "/zh/", lang: "zh-CN", title: /每个回答都有出处/ },
 ] as const;
 
 /**

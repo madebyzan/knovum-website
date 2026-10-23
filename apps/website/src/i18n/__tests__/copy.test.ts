@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { findRetiredTerms } from "../../../../../config/interface-vocabulary.ts";
 import en from "@/i18n/en";
 import zh from "@/i18n/zh";
 
@@ -19,8 +20,12 @@ const CJK = "\\u3400-\\u9fff";
 describe.each([
   ["en", en],
   ["zh", zh],
-])("%s dictionary", (_, dictionary) => {
+] as const)("%s dictionary", (locale, dictionary) => {
   const entries = strings(dictionary);
+
+  it("names features the way the app's interface does", () => {
+    for (const { path, text } of entries) expect(findRetiredTerms(text, locale), path).toEqual([]);
+  });
 
   it("has no empty, padded or double-spaced strings", () => {
     for (const { path, text } of entries) {

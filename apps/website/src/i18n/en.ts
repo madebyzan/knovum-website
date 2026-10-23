@@ -4,9 +4,9 @@ const NBSP = "\u00a0";
 
 const en: Dictionary = {
   meta: {
-    title: "Knovum — The local-first knowledge workspace",
+    title: "Knovum — Answers that cite your own sources",
     description:
-      "Notes, recordings, saved pages and documents on one infinite canvas, with on-device AI and answers that cite their sources. For macOS and Windows.",
+      "Recordings, web pages, documents and notes on one local canvas. Transcribe and search on your computer; every answer cites the original. macOS and Windows.",
   },
 
   a11y: {
@@ -22,9 +22,11 @@ const en: Dictionary = {
   nav: {
     documentation: "Documentation",
     sections: {
+      useCases: "Use cases",
       features: "Features",
       onDeviceAi: "On-device AI",
       workflow: "How it works",
+      questions: "FAQ",
       download: "Download",
     },
     download: "Download",
@@ -33,8 +35,8 @@ const en: Dictionary = {
   hero: {
     announcement: (version) => `Knovum ${version} is out`,
     releaseNotes: "Release notes",
-    title: ["All your sources.", "One canvas."],
-    lead: "Knovum is a local-first knowledge workspace. Notes, recordings, saved pages and documents sit side by side on an infinite canvas — and every result AI helps you make remembers exactly where it came from.",
+    title: ["Every answer,", "back to its source."],
+    lead: "Knovum keeps recordings, web pages, documents and notes on one canvas on your computer. Transcribe and search them locally, then ask questions of your own material — every answer cites the page, the sentence, the moment in the recording.",
     downloadAction: "Download Knovum",
     sourceAction: "View on GitHub",
     availability: `macOS${NBSP}14+ · Windows${NBSP}10+ · Free for personal use`,
@@ -81,12 +83,52 @@ const en: Dictionary = {
   statement:
     "Knowledge work rarely stays in one format. A recording sits beside a saved article, a screenshot, an open question and a half-finished draft. The valuable part is how they connect — so Knovum keeps them together, and keeps the connections.",
 
+  useCases: {
+    title: "Arrive with a question. Leave with work you can defend.",
+    lead: "Four ways people use Knovum most. Each has a tutorial: follow the same steps and you get the same result.",
+    labels: { bring: "You bring", work: "In Knovum", result: "You leave with" },
+    guide: "Follow the tutorial",
+    items: {
+      interviews: {
+        audience: "User research",
+        title: "Find the real reason in hours of interviews",
+        bring: "A handful of customer interviews, each forty minutes long.",
+        work: "Transcribe them on your computer with speakers separated, then ask why people leave after the trial.",
+        result:
+          "A findings memo where every reason links to the moment in the recording. One click plays the original words.",
+      },
+      meetings: {
+        audience: "Meetings and lectures",
+        title: "Turn an hour of audio into notes you can search",
+        bring: "A meeting or lecture recording, or an audio note taken on the spot.",
+        work: "Transcribe it, jump back to any moment by its timestamp, and ask what was decided and who owns it.",
+        result: "Notes organized by topic. Every decision traces back to what was actually said.",
+      },
+      research: {
+        audience: "Research and writing",
+        title: "Turn saved pages and PDFs into an argument that holds",
+        bring: "Saved articles, report PDFs and your own notes.",
+        work: "Shape them into claims and evidence, let Knowledge checks flag what still lacks support, then draft from the selection.",
+        result:
+          "A draft that remembers which sources and revisions it used, and tells you when a source changes.",
+      },
+      video: {
+        audience: "Video",
+        title: "Subtitle a video, then give it another language",
+        bring: "An explainer or an interview on video.",
+        work: "Recognize speech on your computer and burn in subtitles. When you need to, separate the voice from the background and generate a dub.",
+        result:
+          "A new version of the video. The original stays untouched; every subtitle and line of the dub stays editable.",
+      },
+    },
+  },
+
   features: {
     title: "Built for work that has to hold up.",
     items: [
       {
         title: "A free canvas, with structure underneath",
-        body: "Lay out notes, media and documents however you think. When an argument takes shape, turn it into claims, evidence and questions joined by real relations — and Knowledge Health points out what isn’t supported yet.",
+        body: "Lay out notes, media and documents however you think. When an argument takes shape, turn it into claims, evidence and questions joined by real relations — and Knowledge checks point out what isn’t supported yet.",
       },
       {
         title: "Answers you can check",
@@ -108,7 +150,7 @@ const en: Dictionary = {
         { kind: "Saved page", title: "The onboarding gap" },
         { kind: "Survey", title: "Pricing survey, Q3" },
       ],
-      health: "Knowledge Health",
+      health: "Knowledge checks",
       healthDetail: "1 contradiction to resolve",
     },
     citation: {
@@ -168,7 +210,7 @@ const en: Dictionary = {
   onDevice: {
     kicker: (count) => `On-device AI · ${String(count)} capabilities`,
     title: "AI that runs on your own computer.",
-    lead: "Each model downloads once, the first time you need it — checksum-pinned, cancellable from the Task Center, and Metal-accelerated on Apple silicon.",
+    lead: "Each model downloads once, the first time you need it — checksum-pinned, cancellable from the Tasks panel, and Metal-accelerated on Apple silicon.",
     groups: {
       audio: {
         title: "Listen",
@@ -223,6 +265,52 @@ const en: Dictionary = {
     body: "Canvas editing, search, transcription and semantic indexing work without any AI connection. When you want generated results, connect the provider you already use — or hand the work to a desktop agent with its own credentials.",
     anyCompatible: "any OpenAI-compatible endpoint",
     footnote: "Keys stay in a dedicated local secrets store and are never written to logs.",
+  },
+
+  questions: {
+    title: "Questions",
+    items: [
+      {
+        question: "Is Knovum free?",
+        answer:
+          "Free for personal, non-commercial use. The source code is published under the Knovum Personal Non-Commercial License 1.0 and is on GitHub.",
+      },
+      {
+        question: "Does it need an internet connection?",
+        answer:
+          "Editing the canvas, search and transcription run on your computer and work offline once their models are downloaded. Saving a web page, the first download of a model and cloud AI services need a connection.",
+      },
+      {
+        question: "Where is my material stored?",
+        answer:
+          "On your own computer: the library, copies of your files and the search index are all local. Content leaves only when you choose a cloud AI service, and then only what that operation needs.",
+      },
+      {
+        question: "Do I need an AI provider key?",
+        answer:
+          "No. Organizing, search, transcription and semantic indexing don’t depend on any AI connection. When you want generated answers, documents or images, connect a provider you already use, or a desktop Agent with its own account.",
+      },
+      {
+        question: "Do I need a dedicated GPU?",
+        answer:
+          "No. The core runs on an ordinary computer, and Macs with Apple silicon use Metal to speed up transcription and embeddings. A few optional features, such as voice cloning, need more memory; the documentation lists the requirements.",
+      },
+      {
+        question: "What can I bring in?",
+        answer:
+          "Web links, Markdown, PDFs, Office documents, images, audio and video, plus notes written straight onto the canvas. A single file can be up to 8 GiB.",
+      },
+      {
+        question: "How is it different from a notes app or a chatbot?",
+        answer:
+          "A notes app stores your material; a chatbot gives you an answer. Knovum joins the two: answers come from your own material, and every sentence shows where it came from, so you can check it.",
+      },
+      {
+        question: "Which systems are supported?",
+        answer: "macOS 14 or later, on Apple silicon and Intel; Windows 10 version 2004 or later, 64-bit.",
+      },
+    ],
+    more: "More questions in the documentation",
   },
 
   download: {

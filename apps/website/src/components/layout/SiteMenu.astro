@@ -1,5 +1,5 @@
 ---
-import { DOCS_URL } from "astro:env/server";
+import { documentationUrl } from "@/lib/documentation";
 import { Icon } from "astro-icon/components";
 
 import { PRIMARY_SECTIONS } from "@/config/navigation";
@@ -10,7 +10,7 @@ import { action, navLink } from "../ui/variants";
 import LocaleSwitch from "./LocaleSwitch.astro";
 
 const { locale, t } = getI18n(Astro);
-const documentationUrl = new URL(locale === "zh" ? "/zh/" : "/", DOCS_URL);
+const documentationHome = documentationUrl(locale);
 const MENU_ID = "site-menu";
 ---
 
@@ -45,7 +45,7 @@ const MENU_ID = "site-menu";
         </li>
       ))}
       <li>
-        <a class={navLink({ class: "block py-3 text-lead" })} href={documentationUrl}>
+        <a class={navLink({ class: "block py-3 text-lead" })} href={documentationHome}>
           {t.nav.documentation}
         </a>
       </li>

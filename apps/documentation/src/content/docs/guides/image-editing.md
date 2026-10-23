@@ -1,27 +1,47 @@
 ---
-title: Edit and transform images
-description: Distinguish saved image edits from new AI-derived resources.
+title: Edit images
+description: Crop and color, remove backgrounds, upscale and repair; most of it runs on your computer, and the original is always kept.
 ---
 
-## Edit the same image
+Select an image to edit it directly. Image operations in Knovum come in two kinds:
 
-Select an image and open its contextual editing tools. Crop, rotate, flip and deterministic adjustments belong to the original node’s edit session. Preview the change, then Apply or Cancel. Applied edits are one history operation and resource export uses the current applied result.
+- **Edits**: crop, rotate and adjust color. They change this image; choose **Apply** to confirm.
+- **Generations**: background removal, upscaling, repair, cut-outs, new views and relative depth. Each creates a new image next to the original, which stays unchanged.
 
-## Produce a separate result
+## Crop, rotate and adjust
 
-Background removal, upscaling, repair, smart-selection extraction and relative-depth estimation use local models and create derived resources. Text-described removal and multi-angle generation can use compatible explicitly chosen remote targets. The operation decides which execution targets are valid; a general text model is not automatically an image-edit model.
+- **Crop**: crop freely, or use a preset ratio such as **Square**, **Story**, **Portrait** or **Landscape**. With **Lock crop aspect ratio** on, dragging keeps the shape.
+- **Flip and rotate**: **Rotate clockwise**, **Flip horizontal**, **Flip vertical**, or enter a **Rotation angle**.
+- **Adjust**: four groups of sliders: **Light** (exposure, contrast, highlights, shadows, whites, blacks), **Color** (saturation, vibrance, temperature, tint), **Texture** (sharpening, clarity, grain) and **Effects** (vignette, soft light, glow).
 
-1. Select the source and the appropriate operation.
-2. Set any required mask, points, rectangle or parameters.
-3. Generate and watch preparation/execution progress.
-4. Inspect the newly published resource and its source relation.
+When you are happy, choose **Apply** to make one undoable edit. If you leave without applying, Knovum asks **Apply image changes?**. Exports use the applied result.
 
-Successful derivations publish automatically; they do not need a second “add result” click. The original source remains available.
+## Runs on your computer
 
-## Smart selection and depth
+These use local models. They download on first use, then work offline, and the image never leaves your computer:
 
-Points, exclusion points, a rectangle and brush additions are temporary selection state. Merely selecting does not create a new asset; Extract or Repair does.
+| Operation             | What it does                                                                                                  |
+| --------------------- | ------------------------------------------------------------------------------------------------------------- |
+| **Remove background** | Removes the background and creates a new image with transparency                                              |
+| **Upscale**           | Outputs a 2K, 4K or 8K version, good for small images and blurry screenshots                                  |
+| **Select object**     | Click the subject, refine with **Exclude point**, **Draw a box** and **Refine with brush**; up to six prompts |
+| **Cut out**           | Saves the selected object as its own image                                                                    |
+| **Repair**            | Paint over what you don't want with the **Eraser**, then **Remove and generate** to fill it in                |
+| **Relative depth**    | Generates a depth map, near parts brighter and far parts darker                                               |
 
-Depth output is a 16-bit PNG containing relative inverse-depth values: brighter means nearer, not a measured distance. Preserve the original PNG. Treat it as analysis data, not a photo to color-adjust. Depth-based blur is not an available validated operation.
+A selection is temporary; a new image is created only when you choose **Cut out** or **Remove and fill**. Repair supports images up to 16 megapixels and 16,384 pixels on each side.
 
-Check fine edges, hair and repaired details at useful magnification. AI reconstruction is not proof of what was originally present.
+## Needs an AI provider
+
+- **Repair by description**: in the **Eraser**, switch to **Describe** and write what to remove, such as “remove the watermark in the bottom right”.
+- **New view**: adjust **Rotation**, **Tilt** and **Zoom** for the **Subject** or **Camera**, from **Wide angle** to **Close-up**, to generate the same scene from another angle.
+
+Both need a model that supports image editing. Ordinary text models can't edit images; without a suitable model you'll see **Check the image model and credential settings**.
+
+## Comment on an image
+
+Use **Comment** to annotate an image: **Point comment**, **Region comment** or **Draw a comment**. Choose **Add to conversation** and the Agent receives the location and content of each mark, which is ideal for “make the boxed area blue”.
+
+:::note[When you look at the result]
+Upscaled and repaired details are reconstructed by AI. They work for presentation but don't prove the original contained them. A depth map shows relative distance and can't be used to measure real distances.
+:::

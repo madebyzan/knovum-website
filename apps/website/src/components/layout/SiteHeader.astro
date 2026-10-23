@@ -1,5 +1,5 @@
 ---
-import { DOCS_URL } from "astro:env/server";
+import { documentationUrl } from "@/lib/documentation";
 import { Icon } from "astro-icon/components";
 
 import { PRIMARY_SECTIONS } from "@/config/navigation";
@@ -14,7 +14,7 @@ import LocaleSwitch from "./LocaleSwitch.astro";
 import SiteMenu from "./SiteMenu.astro";
 
 const { locale, t } = getI18n(Astro);
-const documentationUrl = new URL(locale === "zh" ? "/zh/" : "/", DOCS_URL);
+const documentationHome = documentationUrl(locale);
 ---
 
 <header class="sticky top-0 z-50 border-b border-line bg-paper/80 backdrop-blur-xl backdrop-saturate-150">
@@ -33,7 +33,7 @@ const documentationUrl = new URL(locale === "zh" ? "/zh/" : "/", DOCS_URL);
           </li>
         ))}
         <li>
-          <a class={navLink()} href={documentationUrl}>
+          <a class={navLink()} href={documentationHome}>
             {t.nav.documentation}
           </a>
         </li>

@@ -1,25 +1,55 @@
 ---
-title: Capture sources
-description: Save websites, import files and distinguish originals from managed copies.
+title: Collect sources
+description: Bring web pages, documents, images, recordings and video into a Space, and make sure Knovum can read what's inside.
 ---
 
-## Save a website
+Sources can be searched and cited only once they are in a Space. This page covers how to bring each kind in, and how to confirm Knovum really read the content.
 
-Use **Add Website** with an HTTP/HTTPS URL or a domain-like address. The address is saved first; page title, site identity, preview and readable article text are prepared when available. A failed metadata refresh retains the previously saved content.
+## Three quickest ways
 
-Capture is not a complete offline mirror of a website. A page that requires login or does not expose readable article content may not yield the text you expect. Keep the original URL for verification.
+- **Drop**: drag files from the desktop, Finder or File Explorer onto the canvas.
+- **Paste**: copy text, an image or an address and paste it on the canvas.
+- **Double-click**: double-click an empty spot to create a note and start writing.
+
+For more options, open **Add content** on the canvas.
+
+## Save a web page
+
+In **Add content**, choose **Add website** and paste the address. Knovum keeps the link and captures the title, summary and readable text, so the page can be searched and cited.
+
+If capturing fails, the link is still kept; choose **Refresh web content** in **Details** to try again. Pages behind a sign-in usually can't be captured. Knovum stores the readable text, not an offline copy of the whole site, and keeps the original address so you can go back and check.
 
 ## Import files
 
-Use **Import Files** to select regular files. Knovum copies file assets into its private storage. Markdown becomes editable Space content. PDF and supported Office formats provide extracted text and available system previews; specialist editing remains in the associated desktop application.
+Choose **Import files…**, or drop the files in. Common formats all work:
 
-- Single resource files are limited to 8 GiB.
-- Directory import is not supported.
-- Archives remain opaque files: importing a ZIP does not expand or index its contents.
-- Known credential-bearing files such as `.env` are not added to searchable text previews.
+| Type                         | What you can do after importing                                |
+| ---------------------------- | -------------------------------------------------------------- |
+| Markdown                     | Edit it directly in Knovum                                     |
+| PDF, Word, PowerPoint, Excel | Text is extracted for search and citation                      |
+| Images                       | With a vision model, recognize what's shown and the text in it |
+| Audio, video                 | Transcribe to searchable text on your computer                 |
+| Code                         | Cite by line number                                            |
 
-Import capacity is not extraction capacity. Semantic document parsing has narrower budgets, including a 128 MiB input limit and a 2,000-page PDF limit.
+Knovum stores a copy of each imported file in its library and leaves the original on your computer untouched. The two don't stay in sync: when the original has a new version, import it again.
 
-## Understand the copy
+## Confirm the content is readable
 
-Opening an imported resource opens Knovum’s managed copy, not necessarily the file you originally selected. Changes made to that private copy in an external editor are re-inspected when Knovum starts or regains focus. Do not assume the external original and the managed copy are synchronized.
+After import, text extraction, transcription and similar processing run in the background, with progress in the **Tasks** panel. Select the resource and open **Details**:
+
+- **Extracted text**: the text Knovum read from the document.
+- **OCR recognized text**: text recognized in an image.
+- **Document processing**: how many pages have been extracted. Image-only pages in scanned PDFs are listed separately.
+
+Only content Knovum can read can be found and cited. Checking this before you ask saves a lot of confusion.
+
+## Limits
+
+- A single file can be up to 8 GiB.
+- Text extraction stops at 128 MiB and 2,000 PDF pages; larger files can still be imported and opened, but are not fully extracted.
+- Archives are stored as ordinary files. They are not unpacked, and their contents are not searched.
+- Files such as `.env` that may contain secrets don't get a searchable text preview.
+
+## Edit in another app
+
+Select the resource and choose **Open in external editor**. After you save in the other app, Knovum reads the content again the next time it starts or its window regains focus.

@@ -1,80 +1,87 @@
 ---
 title: Your first Space
-description: Complete one small research workflow, from a question to a checked answer and a portable result.
+description: One question, two sources and a conclusion you have checked yourself. The whole Knovum workflow in ten minutes.
 ---
 
-## Before you begin
+This tutorial answers one question from two sources and walks through the core loop of Knovum: collect sources, read them yourself, ask, check every citation, and write down the conclusion.
 
-Install and open Knovum. Prepare one short article or Markdown file and a second source about the same question. No provider key is needed for importing, organizing, keyword search or export. For a generated answer, configure an [AI provider](../../guides/providers/) or [desktop Agent](../../guides/agents/) first.
+:::note[You need]
+The address of an article or a document, plus a second source about the same question. Importing, organizing and searching need no AI account; asking in step 5 needs an [AI provider](../../guides/providers/) or an enabled [desktop Agent](../../guides/agents/).
+:::
 
-This example asks: **Why do people stop using our trial?** Replace it with your own question. The example titles and text below are practice material, not built-in product content.
+The example question is: **why do people stop after a trial?** Use your own question if you have one.
 
-## 1. Create a bounded workspace
+## 1. Create a Space
 
-Create a Space from the library and name it **Trial research**. Add a note containing your question and what would count as enough evidence.
+Press <kbd>⌘/Ctrl</kbd> + <kbd>T</kbd> for a New Space and rename it “Trial research”.
 
-A useful starting note:
+Double-click an empty spot on the canvas to create a note. Write the question and what would count as an answer:
 
-> Question: Why do people stop using our trial?
-> Need: specific reasons, the source of each reason, and what is still unknown.
-> Do not treat one interview as representative of all users.
+> Question: why do people stop after a trial?
+> Needed: specific reasons, the source for each, and what we still don't know.
 
-**Checkpoint:** the Space has a meaningful name and your question is visible. Do not import the entire library yet; two relevant sources are enough to learn the workflow.
+:::tip[Checkpoint]
+The canvas has one note with the question. Don't bring in everything yet; two sources are enough to get through the workflow.
+:::
 
-## 2. Bring in the evidence
+## 2. Add your sources
 
-Use **Add Website** to save your article URL or **Import Files** to select the document. Add the second source. If you use audio, start [transcription](../../guides/transcription/) and wait for it to finish.
+Open **Add content** on the canvas:
 
-Open each resource and confirm that the body text or transcript is present. A saved filename is not evidence that extraction finished. Files are managed copies, not a synchronized link to the external original.
+- A web page: choose **Add website** and paste the address. Knovum saves the link and captures the title, summary and readable text.
+- A file: choose **Import files…**, or drop the file onto the canvas. PDF, Word, PowerPoint and Markdown all work.
 
-**Checkpoint:** you can read the actual passage you intend to use. If only a title appears, check the import/extraction task before proceeding.
+Open each source and make sure you can read its text, not only its title. Text extraction for PDF and Office documents runs in the background; its progress appears in the **Tasks** panel.
 
-## 3. Make the scope explicit
+:::tip[Checkpoint]
+Both sources open, and you can read the passages you intend to cite.
+:::
 
-Put the relevant material in a Section named **Evidence**. Keep your working question separate. Use a Group only when you need to move several objects together; it serves a different purpose from a Section.
+## 3. Mark the sources for this question
 
-Use Outline Locate if you lose a source on the canvas. It reveals the containing Group or Section instead of creating another copy.
+Select both sources, right-click and choose **Create section**, and name it “Evidence”. When you ask later, selecting this one section brings along everything in it.
 
-**Checkpoint:** you know exactly which material belongs to this question and can return to it through the Outline.
+As the Space grows, use the **Outline** to find things: click any item and the canvas moves to it.
 
-## 4. Find a passage before generating
+## 4. Find a passage yourself first
 
-Try a distinctive keyword from your question or source. Open a result and compare the matched passage with the original.
+Press <kbd>⌘/Ctrl</kbd> + <kbd>F</kbd> to open **Find** and search for a word you expect to appear, such as “price” or “import”. Open a result and read the passage.
 
-Use semantic search only after explicitly preparing its embedding model and index. For this first workflow, keyword search is sufficient and removes model readiness as a possible source of failure.
+Having read the original yourself before you ask is what lets you judge whether the Agent's answer holds up.
 
-**Checkpoint:** at least one relevant passage has been read directly, without relying on a generated summary.
+## 5. Ask your sources
 
-## 5. Ask a question you can audit
+Open the **Conversation** panel and pick **Knovum Agent** or an enabled desktop Agent in **Choose an Agent**. Select the “Evidence” section, choose **Add resource** → **Add current selection**, then type:
 
-Select the relevant sources and use that scope in the question/conversation surface. Select an available execution target. Try:
+> What reasons for abandoning the trial do these sources mention?
+> Quote the original text that supports each reason.
+> Separate what the sources say from what you infer, and say so when sources conflict or say too little.
 
-> What reasons for stopping the trial appear in these sources?
-> For each reason, cite the supporting passage.
-> Distinguish what the sources say from your interpretation.
-> If the sources disagree or leave a gap, state that explicitly.
+The answer lists its **Sources**. Choose **Locate at source** for each one and ask yourself: does the original really say this?
 
-Open every citation that matters to the answer. Does the source say what the answer claims? Is the quote current, or a historical detached citation? A fluent answer and a plausible link are not sufficient verification.
+:::tip[Checkpoint]
+You have seen the original of every statement you intend to keep. Remove anything that doesn't match, or mark it as unconfirmed.
+:::
 
-**Checkpoint:** you can independently justify the main conclusion. If a citation cannot be verified, exclude that assertion or label it unresolved.
+## 6. Write down the conclusion
 
-## 6. Save a conclusion, not just a response
+When a passage is worth keeping, use **Extract as evidence** to turn it into an evidence object on the canvas.
 
-Write a note with three parts: **what the evidence supports**, **what remains uncertain**, and **what to do next**. Keep relevant links or relations visible. For a more formal result, create a document from the selected material and inspect its input trail.
+Next to the “Evidence” section, create a note in three parts: **what the sources support**, **what is still uncertain**, **what to do next**.
 
-Export the document when you need to share a deliverable. Export the whole Space as `.knovumspace` when you need to preserve its content, assets and relationships or move it to another computer.
+To record the argument more rigorously, create a claim for each conclusion and connect the evidence to it with **Supports** or **Contradicts**; see [Structured knowledge](../../guides/knowledge/). When you need a formal document, select the material and use [Create from selection](../../guides/creation/).
 
-**Checkpoint:** open the delivered file or import the package into a new Space and check it. Exporting one document is not backing up the workspace.
+## If something doesn't work
 
-## If something blocks you
+| Symptom                                      | Check first                                                                          |
+| -------------------------------------------- | ------------------------------------------------------------------------------------ |
+| An imported document shows only a title      | Whether text extraction has finished in the **Tasks** panel                          |
+| Something said in a recording can't be found | Whether the recording has been transcribed                                           |
+| No **Semantic search**                       | It downloads a local model the first time; see [Find sources](../../guides/search/)  |
+| No Agent to choose                           | Whether a model has **Use for the built-in Agent** on, or a desktop Agent is enabled |
+| A citation doesn't match the original        | Whether the source was edited after the answer                                       |
 
-| Symptom                            | First check                                          |
-| ---------------------------------- | ---------------------------------------------------- |
-| Imported document has no body      | Import/extraction progress and supported format      |
-| Recording has no searchable speech | Transcription task, not provider configuration       |
-| Semantic search is unavailable     | Local embedding preparation and current index        |
-| Ask fails                          | Selected executor, credentials and operation support |
-| Citation no longer matches         | Source revision and detached/current status          |
-| Export is unavailable              | Resource readiness and the formats actually offered  |
+## Next
 
-Keep the originals. Do not delete the database to fix a failed operation. Continue with [structured knowledge](../../guides/knowledge/) or [export and transfer](../../guides/export/).
+- [Interview research: from recordings to findings](../../tutorials/interviews/): the same workflow with recordings, transcripts and speakers.
+- [Meetings and lectures: from a recording to notes](../../tutorials/meetings/): from one recording to confirmed decisions and owners.

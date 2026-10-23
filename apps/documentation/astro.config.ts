@@ -2,6 +2,7 @@ import { existsSync } from "node:fs";
 import starlight from "@astrojs/starlight";
 import { defineConfig } from "astro/config";
 import { PRODUCT_NAME, PRODUCT_REPOSITORY_URL } from "../../config/product.ts";
+import { SIDEBAR } from "./src/config/sidebar.ts";
 
 if (existsSync(".env")) process.loadEnvFile(".env");
 const site = process.env["SITE_URL"];
@@ -24,42 +25,7 @@ export default defineConfig({
       },
       editLink: { baseUrl: "https://github.com/madebyzan/knovum-website/edit/main/apps/documentation/" },
       social: [{ icon: "github", label: "GitHub", href: PRODUCT_REPOSITORY_URL }],
-      sidebar: [
-        {
-          label: "Start here",
-          translations: { "zh-CN": "开始使用" },
-          items: ["index", "getting-started/installation", "getting-started/first-space"],
-        },
-        {
-          label: "Work with knowledge",
-          translations: { "zh-CN": "知识工作" },
-          items: ["guides/capture", "guides/organization", "guides/search", "guides/ask", "guides/knowledge"],
-        },
-        {
-          label: "Create and preserve",
-          translations: { "zh-CN": "创作与保存" },
-          items: [
-            "guides/transcription",
-            "guides/creation",
-            "guides/image-editing",
-            "guides/video-editing",
-            "guides/speech-projects",
-            "guides/dubbing",
-            "guides/export",
-            "guides/backup",
-          ],
-        },
-        {
-          label: "AI and execution",
-          translations: { "zh-CN": "AI 与执行" },
-          items: ["guides/providers", "guides/local-models", "guides/agents", "guides/mcp"],
-        },
-        {
-          label: "Reference",
-          translations: { "zh-CN": "参考与排障" },
-          items: ["reference/privacy", "reference/shortcuts", "reference/troubleshooting"],
-        },
-      ],
+      sidebar: SIDEBAR,
     }),
   ],
 });

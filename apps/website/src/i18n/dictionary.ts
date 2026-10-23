@@ -1,4 +1,5 @@
 import type { ProjectLinkKey, SectionKey } from "@/config/navigation";
+import type { UseCaseId } from "@/data/use-cases";
 import type { ModelOperationGroup, ModelOperationId } from "@/data/model-operations";
 import type { InstallerKind, Platform } from "@/lib/releases/installers";
 
@@ -9,6 +10,22 @@ export interface Passage {
 }
 
 type Four<T> = readonly [T, T, T, T];
+type Eight<T> = readonly [T, T, T, T, T, T, T, T];
+
+/** One piece of work, from the material a reader brings to what they leave with. */
+interface UseCase {
+  readonly audience: string;
+  readonly title: string;
+  readonly bring: string;
+  readonly work: string;
+  readonly result: string;
+}
+
+/** A question a visitor asks before installing, and its answer. */
+interface Answer {
+  readonly question: string;
+  readonly answer: string;
+}
 
 /** A source shown as evidence for a claim. */
 interface Evidence {
@@ -96,6 +113,14 @@ export interface Dictionary {
 
   readonly statement: string;
 
+  readonly useCases: {
+    readonly title: string;
+    readonly lead: string;
+    readonly labels: { readonly bring: string; readonly work: string; readonly result: string };
+    readonly guide: string;
+    readonly items: Readonly<Record<UseCaseId, UseCase>>;
+  };
+
   /**
    * Each feature is a passage beside a specimen of the interface it describes. The specimens draw on
    * the sample Space under `canvas`, so only what is new to each one is here.
@@ -166,6 +191,12 @@ export interface Dictionary {
     readonly body: string;
     readonly anyCompatible: string;
     readonly footnote: string;
+  };
+
+  readonly questions: {
+    readonly title: string;
+    readonly items: Eight<Answer>;
+    readonly more: string;
   };
 
   readonly download: {

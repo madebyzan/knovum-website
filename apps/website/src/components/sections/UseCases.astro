@@ -1,0 +1,62 @@
+---
+import { SECTION_IDS } from "@/config/navigation";
+import { USE_CASES } from "@/data/use-cases";
+import { getI18n } from "@/i18n/page-language";
+import { documentationUrl } from "@/lib/documentation";
+import { formatOrdinal } from "@/lib/format";
+
+import Section from "../ui/Section.astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+
+const { locale, t } = getI18n(Astro);
+const id = SECTION_IDS.useCases;
+const { labels } = t.useCases;
+---
+
+<Section id={id} labelledBy={`${id}-title`} divided>
+  <SectionHeading
+    id={`${id}-title`}
+    kicker={t.nav.sections.useCases}
+    title={t.useCases.title}
+    lead={t.useCases.lead}
+  />
+  <ol class="mt-split">
+    {USE_CASES.map(({ id: caseId, guide }, index) => {
+      const item = t.useCases.items[caseId];
+      return (
+        <li class="grid gap-x-12 gap-y-8 border-t border-line py-12 lg:grid-cols-12" data-reveal>
+          <div class="lg:col-span-4">
+            <p class="flex gap-4 text-label text-ink-subtle">
+              <span class="font-mono" aria-hidden="true">
+                {formatOrdinal(index)}
+              </span>
+              {item.audience}
+            </p>
+            <h3 class="mt-4 text-heading">{item.title}</h3>
+            <a
+              class="mt-6 inline-flex items-center gap-2 text-body-sm font-medium text-ink underline-offset-4 hover:underline"
+              href={documentationUrl(locale, guide)}
+            >
+              {t.useCases.guide}
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+          <dl class="grid gap-8 sm:grid-cols-3 lg:col-span-8">
+            <div>
+              <dt class="mb-3 text-label text-ink-subtle">{labels.bring}</dt>
+              <dd class="text-body-sm text-ink-muted">{item.bring}</dd>
+            </div>
+            <div>
+              <dt class="mb-3 text-label text-ink-subtle">{labels.work}</dt>
+              <dd class="text-body-sm text-ink-muted">{item.work}</dd>
+            </div>
+            <div class="sm:border-l sm:border-line sm:pl-8">
+              <dt class="mb-3 text-label text-ink">{labels.result}</dt>
+              <dd class="text-body-sm text-ink">{item.result}</dd>
+            </div>
+          </dl>
+        </li>
+      );
+    })}
+  </ol>
+</Section>

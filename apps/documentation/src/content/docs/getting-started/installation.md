@@ -1,29 +1,39 @@
 ---
 title: Install Knovum
-description: Choose the correct installer and understand what happens on first use.
+description: Pick the right installer, and what happens the first time you open the app.
 ---
 
-## Choose your build
+## Choose an installer
 
-| Computer               | Required system                                | Build             |
-| ---------------------- | ---------------------------------------------- | ----------------- |
-| Mac with Apple silicon | macOS 14 or later                              | Apple silicon DMG |
-| Intel Mac              | macOS 14 or later                              | Intel DMG         |
-| Windows PC             | Windows 10 version 2004 / build 19041 or later | x64 installer     |
+| Computer          | Requirement                              | Installer         |
+| ----------------- | ---------------------------------------- | ----------------- |
+| Apple silicon Mac | macOS 14 or later                        | Apple silicon DMG |
+| Intel Mac         | macOS 14 or later                        | Intel DMG         |
+| Windows PC        | Windows 10 version 2004 (19041) or later | x64 installer     |
 
-Linux and Windows on ARM are not supported release targets. On a Mac, use **About This Mac** to identify the chip.
+Not sure which chip your Mac has? Open the Apple menu, choose **About This Mac** and look at **Chip**. Linux and Windows on ARM are not supported yet.
 
 ## Install
 
-Download from the official Knovum website or the [product releases](https://github.com/madebyzan/knovum/releases).
+Download the installer from the Knovum website (**Website** at the top right of this page) or from the [GitHub releases page](https://github.com/madebyzan/knovum/releases).
 
-- **macOS:** open the DMG, drag Knovum to Applications, then launch the installed application.
-- **Windows:** run the x64 setup executable and follow the installer.
+- **macOS**: open the DMG, drag Knovum into **Applications**, then start it from **Applications**.
+- **Windows**: run the x64 installer and follow the wizard.
 
-If the operating system reports an unverified or damaged package, stop and verify the download source. Do not disable system protections as a normal installation step.
+:::caution[The installer is reported as damaged or unverified]
+Stop and download it again from the official sources above. Do not turn off Gatekeeper or SmartScreen to get it installed.
+:::
 
-## First use
+## The first launch
 
-Opening a Space or writing a note does not require a provider key. Local models are not all downloaded during installation. Starting a capability that requires a missing model prepares it and shows progress in Task Center. Initial preparation needs a network connection and disk space; subsequent inference uses installed models locally.
+You can create Spaces, write notes, import sources and search straight away, without any AI account. Local models are not downloaded with the installer: the first time you use transcription, semantic search or a similar feature, Knovum downloads the model it needs and shows the progress in the **Tasks** panel. That step needs a network connection and some disk space; afterwards the model runs on your computer.
 
-An application update is separate from your library. Export important Spaces before moving between computers or changing an installation you rely on.
+To have Knovum answer questions and generate documents, set up an [AI provider](../../guides/providers/) or a [desktop Agent](../../guides/agents/).
+
+## Updates
+
+Knovum checks for updates when it starts and every six hours after that. When a new version is available, you can read the release notes before deciding to download it. The update package's signature is verified, and the update is installed when you confirm the restart. Updates never touch your library.
+
+## Next
+
+[Your first Space](../first-space/): the whole path from sources to a conclusion, in ten minutes.

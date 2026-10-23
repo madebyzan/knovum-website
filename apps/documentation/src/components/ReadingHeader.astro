@@ -1,23 +1,28 @@
 ---
+/**
+ * Page title for every document except a locale's front page, which carries its own introduction.
+ * The category is the sidebar group the page belongs to, so it always matches the navigation.
+ */
 import PageTitle from "@astrojs/starlight/components/PageTitle.astro";
-const { entry, lang } = Astro.locals.starlightRoute;
-const isIndex = /(?:^|\/)index$/.test(entry.id) || entry.id === "" || entry.id === "zh";
+import { readingMinutes } from "@/lib/reading-time";
+
+type SidebarEntry = (typeof Astro.locals.starlightRoute.sidebar)[number];
+
+const { entry, id, lang, locale, sidebar } = Astro.locals.starlightRoute;
+const isFrontPage = id === (locale ?? "");
 const chinese = lang === "zh-CN";
-const words = entry.body?.length ?? 0;
-const minutes = Math.max(2, Math.ceil(words / (chinese ? 650 : 1100)));
-const category = entry.id.includes("reference/")
-  ? chinese
-    ? "参考"
-    : "Reference"
-  : chinese
-    ? "使用指南"
-    : "Guide";
+
+function containsCurrent(entries: readonly SidebarEntry[]): boolean {
+  return entries.some((item) => (item.type === "link" ? item.isCurrent : containsCurrent(item.entries)));
+}
+const category = sidebar.find((item) => item.type === "group" && containsCurrent(item.entries))?.label;
+const minutes = readingMinutes(entry.body ?? "");
 ---
 
-{!isIndex && (
+{!isFrontPage && (
   <div class="reading-header">
     <div class="reading-context">
-      <span>{category}</span>
+      {category && <span>{category}</span>}
       <span>{chinese ? `约 ${String(minutes)} 分钟` : `${String(minutes)} min read`}</span>
     </div>
     <PageTitle />
@@ -29,7 +34,7 @@ const category = entry.id.includes("reference/")
     display: flex;
     gap: 1rem;
     align-items: center;
-    color: var(--sl-color-gray-2);
+    color: var(--sl-color-gray-3);
     font-size: 0.8rem;
   }
   .reading-context span + span {

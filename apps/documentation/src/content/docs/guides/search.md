@@ -1,22 +1,39 @@
 ---
-title: Find your material
-description: Choose keyword or semantic search and check indexing readiness.
+title: Find sources
+description: Search exactly by keyword or by meaning with semantic search, in one Space or across all of them.
 ---
 
-## Start with keywords
+Knovum has two ways to search, and both run on your computer.
 
-Keyword search runs locally and needs no provider connection or model download. Use distinctive names or phrases. Space Find searches the current scope; global search can search across active Spaces.
+| Method              | Best when                                                             | What it needs                          |
+| ------------------- | --------------------------------------------------------------------- | -------------------------------------- |
+| **Keyword**         | You remember the exact words, a name or a term                        | Nothing; it works from the start       |
+| **Semantic search** | You remember only the gist, or want similar ideas phrased differently | A local model, downloaded on first use |
 
-Search can only find what is available: an imported document without extracted text or a recording without a transcript has less searchable material than its original file may contain.
+## Find in the current Space
+
+Press <kbd>⌘/Ctrl</kbd> + <kbd>F</kbd> to open **Find** and type a keyword. Results cover notes, web pages, transcripts, file contents and tags. Choose a result and the canvas moves to it; for a recording, the result shows the time range.
+
+## Search all Spaces
+
+When you don't remember which Space something is in, press <kbd>⌘/Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd> to **Search all Spaces**.
 
 ## Search by meaning
 
-Semantic search uses the local Qwen3 embedding model. Preparing semantic search explicitly downloads and verifies that model if necessary, then indexes eligible content. Simply opening a Space does not automatically download missing embedding weights.
+Turn on **Semantic search** in the search box. The first time, Knovum downloads the local embedding model Qwen3 Embedding and indexes your content; the **Tasks** panel shows **Indexing content for semantic search**. After that, describe what you are looking for in a sentence, such as “where users complain that getting started is hard”.
 
-Allow preparation and indexing to finish. A pending index is different from a provider authentication error; keyword search remains a useful first diagnostic.
+The model and the index for semantic search both live on your computer. No AI account is needed and nothing is sent out.
 
-## Inspect a match
+## Related content
 
-Open the matched source and check its passage or location. A search score ranks matches; it is not a probability that the content is true. Related Content also requires prepared embeddings and indexing.
+Select a resource and open **Related content** in **Details**. Knovum finds other material in the Space with similar meaning. These are suggestions only; nothing is connected on the canvas automatically.
 
-If a recently changed file is missing, first confirm Knovum has re-inspected its managed copy and completed extraction. Do not delete your library to rebuild a search result.
+## When nothing turns up
+
+1. **Processing isn't finished**: document text and recording transcripts can't be found until extraction or transcription completes. Check the **Tasks** panel.
+2. **A file you just edited**: Knovum rereads files edited in other apps when its window regains focus. Wait a moment and search again.
+3. **Semantic search returns nothing**: make sure indexing has finished. If needed, **Rebuild retrieval index**.
+
+:::note[Match scores]
+Semantic search ranks by similarity. A top result is close in meaning, which doesn't make it correct; open the original and read it.
+:::
